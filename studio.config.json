@@ -1,0 +1,7 @@
+{
+  "port": 4242,
+  "maxParallel": 2,
+  "model": null,
+  "taal": "nl",
+  "toegestaneOrigins": ["https://app.r7ngrowth.nl"]
+}

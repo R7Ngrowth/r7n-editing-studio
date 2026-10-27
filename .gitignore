@@ -1,0 +1,18 @@
+# Installaties
+engine/node_modules/
+engine/package-lock.json
+stijlen/*/template/node_modules
+.claude/settings.local.json
+.tmp-test/
+
+# Jouw video's, referenties en werkbestanden blijven op je Mac
+videos/
+stijlen/*/referentie/
+stijlen/.prullenbak-*
+stijlen/*/voortgang.json
+stijlen/*/claude-log.jsonl
+stijlen/*/analyse/
+stijlen/*/template/out/
+stijlen/*/template/public/speaker*
+*.log
+.DS_Store

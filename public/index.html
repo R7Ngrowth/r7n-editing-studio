@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>R7N Editing Studio</title>
+<link rel="icon" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif&display=swap" rel="stylesheet" />
+<style>
+/* R7N-huisstijl: dezelfde tokens als Mission Control (donker, oranje accent, serif-titels). */
+:root {
+	--bg: #06070a;
+	--surface: #0b0d12;
+	--surface-2: #11141c;
+	--line: #1b1f2b;
+	--text: #e9ebf2;
+	--muted: #8a91a4;
+	--accent: #ff6a1a;
+	--accent-ink: #0b0b0c;
+	--ok: #3ecf8e;
+	--warn: #f5b942;
+	--bad: #ff5d5d;
+	--sans: 'Geist', system-ui, -apple-system, sans-serif;
+	--mono: 'Geist Mono', ui-monospace, Menlo, monospace;
+	--serif: 'Instrument Serif', Georgia, serif;
+}
+* { box-sizing: border-box; }
+html { font-size: 16.5px; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+button, input, textarea { font: inherit; }
+code { font-family: var(--mono); font-size: .85em; background: var(--surface-2); padding: 2px 6px; border-radius: 6px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px 80px; }
+
+/* kop */
+header { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+header .wrap { display: flex; align-items: center; gap: 22px; padding-top: 12px; padding-bottom: 12px; flex-wrap: wrap; }
+.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.logo img { height: 28px; width: auto; }
+.logo span { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+body.embed .logo, body.embed footer { display: none; }
+nav { display: flex; gap: 2px; flex: 1; flex-wrap: wrap; }
+nav a { text-decoration: none; padding: 8px 12px; border-radius: 8px; font-weight: 500; color: var(--muted); font-size: 14px; border-bottom: 2px solid transparent; }
+nav a.on { color: var(--text); border-bottom-color: var(--accent); border-radius: 0; }
+nav a:not(.on):hover { color: var(--text); }
+.chips { display: flex; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.dot { width: 7px; height: 7px; border-radius: 4px; background: #3a4052; }
+.dot.ok { background: var(--ok); } .dot.bad { background: var(--bad); } .dot.busy { background: var(--accent); animation: pulse 1.2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+
+/* kaarten */
+.kaart { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+.banner { display: none; margin: 22px 0 0; padding: 14px 18px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--warn) 45%, transparent); background: color-mix(in srgb, var(--warn) 10%, transparent); font-size: 14px; line-height: 1.5; }
+.banner b { color: var(--warn); }
+.hero { margin: 26px 0 18px; padding: 28px 30px; }
+.lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.hero .lbl { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.hero .lbl i { font-style: normal; font-family: var(--serif); font-size: 18px; color: var(--accent); letter-spacing: 0; text-transform: none; }
+.hero .lbl s { text-decoration: none; display: inline-block; width: 28px; height: 1px; background: var(--line); }
+h1 { font-family: var(--serif); font-weight: 400; font-size: 44px; letter-spacing: -.015em; line-height: 1.02; margin: 0 0 10px; }
+h1 em { font-style: italic; color: var(--accent); }
+.hero p { color: var(--muted); font-size: 15px; line-height: 1.55; max-width: 720px; margin: 0; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 22px; }
+@media (max-width: 820px) { .steps { grid-template-columns: 1fr; } h1 { font-size: 34px; } }
+.step { background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.step b { display: block; font-size: 15px; margin-top: 8px; font-weight: 600; }
+.step span { color: var(--muted); font-size: 13.5px; line-height: 1.45; }
+.step i { font-style: normal; font-family: var(--serif); font-size: 18px; color: var(--accent); }
+
+.panel { padding: 22px; margin-bottom: 26px; }
+.panel.two { display: grid; grid-template-columns: 1.15fr 1fr; gap: 26px; }
+@media (max-width: 900px) { .panel.two { grid-template-columns: 1fr; } }
+.modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.mode { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; cursor: pointer; background: var(--surface-2); transition: border-color .15s; }
+.mode b { display: block; font-size: 14px; font-weight: 600; }
+.mode small { color: var(--muted); font-size: 12.5px; line-height: 1.4; display: block; margin-top: 3px; }
+.mode.on { border-color: var(--accent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 50%, transparent) inset; }
+.drop { border: 1px dashed #2a3040; border-radius: 12px; padding: 34px 20px; text-align: center; cursor: pointer; background: var(--surface-2); transition: border-color .15s, background .15s; }
+.drop:hover, .drop.over { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface-2)); }
+.drop .big { font-size: 16px; font-weight: 600; margin-top: 8px; }
+.drop .sub { color: var(--muted); font-size: 13px; margin-top: 5px; }
+.drop .ico { font-size: 30px; opacity: .9; }
+.files { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+.files div { display: flex; justify-content: space-between; background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 13.5px; }
+.files a { color: var(--muted); }
+.fields { display: flex; flex-direction: column; gap: 14px; }
+label { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 6px; }
+input[type=text], textarea { width: 100%; font-size: 14.5px; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; background: var(--surface-2); color: var(--text); }
+input[type=text]::placeholder, textarea::placeholder { color: #5b6275; }
+input[type=text]:focus, textarea:focus { outline: 1px solid var(--accent); border-color: var(--accent); }
+textarea { min-height: 84px; resize: vertical; }
+
+/* knoppen: dezelfde drie als in Mission Control */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); background: color-mix(in srgb, var(--accent) 12%, transparent); padding: 9px 14px; font-size: 13.5px; font-weight: 600; color: var(--accent); cursor: pointer; text-decoration: none; transition: background .15s, transform .1s, opacity .15s; }
+.btn:hover { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .45; cursor: default; }
+.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); padding: 13px 20px; font-size: 15px; }
+.primary:hover { background: color-mix(in srgb, var(--accent) 88%, white); }
+.dark { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.dark:hover { background: color-mix(in srgb, var(--accent) 88%, white); }
+.ghost { background: transparent; border-color: var(--line); color: var(--muted); }
+.ghost:hover { color: var(--text); border-color: #2a3040; background: var(--surface-2); }
+.small { padding: 6px 10px; font-size: 12.5px; border-radius: 7px; }
+.bar { height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.bar > div { height: 100%; background: var(--accent); width: 0; transition: width .4s; }
+
+h2 { font-family: var(--serif); font-weight: 400; font-size: 30px; letter-spacing: -.015em; margin: 40px 0 4px; }
+.lead { color: var(--muted); margin: 0 0 16px; font-size: 14.5px; }
+
+/* stijlkaarten */
+.stylegrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.scard { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: border-color .15s; }
+.scard:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.scard .imgs { position: relative; aspect-ratio: 4/5; background: #000; overflow: hidden; }
+.scard .imgs img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: 0; transition: opacity .6s; }
+.scard .imgs img.on { opacity: 1; }
+.scard .imgs .ph { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--text); padding: 20px; text-align: center; background: radial-gradient(70% 60% at 50% 40%, #1a1410, #06070a); }
+.scard .body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+.scard .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.scard .name { font-weight: 600; font-size: 16px; }
+.scard .desc { color: var(--muted); font-size: 13.5px; line-height: 1.45; flex: 1; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 3px 7px; color: var(--muted); }
+.badge { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface-2); color: var(--muted); white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.badge::before { content: ''; width: 4px; height: 4px; border-radius: 2px; background: currentColor; }
+.badge.eigen { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.badge.concurrent { color: #c9a0ff; border-color: rgba(201,160,255,.35); background: rgba(201,160,255,.08); }
+.badge.klaar { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 40%, transparent); background: color-mix(in srgb, var(--ok) 10%, transparent); }
+.badge.bezig, .badge.bouwen { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.badge.mislukt { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, transparent); background: color-mix(in srgb, var(--bad) 10%, transparent); }
+.badge.wachtrij, .badge.concept { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, transparent); background: color-mix(in srgb, var(--warn) 10%, transparent); }
+.actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.log { font: 11.5px/1.45 var(--mono); color: #aeb6c8; max-height: 8.7em; overflow: hidden; text-align: left; width: 100%; }
+.err { font-size: 12.5px; color: var(--bad); white-space: pre-wrap; max-height: 7em; overflow: auto; }
+
+/* stijlkiezer bij video editen */
+.pick { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.pickc { position: relative; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; cursor: pointer; background: var(--surface-2); transition: border-color .15s; }
+.pickc input { position: absolute; opacity: 0; }
+.pickc img { width: 100%; aspect-ratio: 4/5; object-fit: cover; object-position: top; display: block; background: #000; }
+.pickc span { display: block; padding: 8px 10px; font-size: 13px; font-weight: 600; text-transform: none; letter-spacing: 0; color: var(--text); font-family: var(--sans); }
+.pickc.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.pickc.on::after { content: '✓'; position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 12px; background: var(--accent); color: var(--accent-ink); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+
+/* mijn video's */
+.job { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+.jobhead { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; }
+.jobhead img { width: 54px; height: 96px; object-fit: cover; border-radius: 8px; background: var(--surface-2); }
+.jobhead .t { flex: 1; min-width: 0; }
+.jobhead b { font-size: 17px; display: block; font-weight: 600; }
+.meta { color: var(--muted); font-size: 12.5px; margin-top: 3px; font-family: var(--mono); }
+.quote { color: var(--muted); font-size: 13px; margin-top: 6px; font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.outs { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.out { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface-2); display: flex; flex-direction: column; }
+.out .media { position: relative; aspect-ratio: 9/16; background: #000; }
+.out .media img, .out .media video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.out .media img { opacity: .3; }
+.out .overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; padding: 14px; color: #fff; background: linear-gradient(180deg, transparent 35%, rgba(0,0,0,.82)); }
+.out .overlay .step { font-weight: 600; background: none; border: 0; padding: 0; border-radius: 0; }
+.out .b { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 9px; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.row b { font-weight: 600; font-size: 14px; }
+.empty { color: var(--muted); padding: 34px; text-align: center; border: 1px dashed #2a3040; border-radius: 12px; background: var(--surface); font-size: 14px; }
+.page { display: none; } .page.on { display: block; }
+
+/* rapport en handleiding */
+dialog { border: 1px solid var(--line); border-radius: 14px; padding: 0; width: min(780px, 92vw); max-height: 86vh; box-shadow: 0 30px 80px rgba(0,0,0,.6); background: var(--surface); color: var(--text); }
+dialog::backdrop { background: rgba(0,0,0,.6); }
+.md { padding: 26px 32px; overflow: auto; max-height: 86vh; line-height: 1.6; font-size: 14.5px; }
+.md h1 { font-size: 32px; margin: 0 0 8px; } .md h2 { font-size: 24px; margin: 28px 0 8px; } .md h3 { font-size: 17px; margin: 18px 0 6px; font-family: var(--sans); font-weight: 600; }
+.md p, .md li { color: #c9cedb; }
+.md b { color: var(--text); }
+.md a { color: var(--accent); }
+.md table { border-collapse: collapse; width: 100%; font-size: 13.5px; } .md td, .md th { border: 1px solid var(--line); padding: 6px 9px; text-align: left; vertical-align: top; } .md th { color: var(--muted); font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; }
+.md pre { background: #000; color: #e8eef5; padding: 14px 16px; border-radius: 10px; overflow: auto; font-size: 13px; font-family: var(--mono); }
+.helpbox { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+footer { color: var(--muted); font-size: 12px; margin-top: 50px; text-align: center; font-family: var(--mono); letter-spacing: .04em; }
+</style>
+</head>
+<body>
+<header>
+	<div class="wrap">
+		<a class="logo" href="#/"><img src="/logo.png" alt="R7N Growth" /><span>Editing Studio</span></a>
+		<nav>
+			<a href="#/" data-page="stijl">Bouw je stijl</a>
+			<a href="#/editen" data-page="editen">Video editen</a>
+			<a href="#/videos" data-page="videos">Mijn video's</a>
+			<a href="#/hulp" data-page="hulp">Handleiding</a>
+		</nav>
+		<div class="chips">
+			<span class="chip" id="claudeChip"><span class="dot"></span><span>Claude…</span></span>
+			<span class="chip" id="queueChip"><span class="dot"></span><span>Wachtrij leeg</span></span>
+		</div>
+	</div>
+</header>
+
+<div class="wrap">
+	<div class="banner" id="loginBanner">
+		<b>Claude Code is nog niet ingelogd.</b> De studio laat Claude Code het werk doen. Log één keer in: open Terminal, typ <code>claude</code>, daarna <code>/login</code>, en volg de stappen. Klik dan op
+		<button class="btn ghost small" id="recheck">Opnieuw controleren</button>
+		<div class="meta" id="loginDetail"></div>
+	</div>
+
+	<!-- ============ BOUW JE STIJL ============ -->
+	<section class="page" id="page-stijl">
+		<div class="kaart hero">
+			<div class="lbl"><i>I</i><s></s>Bouw je stijl</div>
+			<h1>Bouw je eigen <em>editingstijl</em>.</h1>
+			<p>Upload een paar video's met de stijl die je wilt: je eigen edits of die van een concurrent. Claude analyseert lay-out, ondertitels, animaties en ritme, en maakt er een stijl van die al je nieuwe opnames automatisch zo monteert.</p>
+			<div class="steps">
+				<div class="step"><i>1</i><b>Upload voorbeelden</b><span>1 tot 3 video's of schermopnames van reels in de stijl die je zoekt.</span></div>
+				<div class="step"><i>2</i><b>Claude bouwt je stijl</b><span>Analyse, eigen ondertitels en animaties, een werkend sjabloon en voorbeeldbeelden.</span></div>
+				<div class="step"><i>3</i><b>Edit je video's</b><span>Upload een ruwe opname en krijg hem terug in al je stijlen.</span></div>
+			</div>
+		</div>
+		<div class="kaart panel two">
+			<div>
+				<div class="modes">
+					<div class="mode on" data-mode="eigen"><b>Mijn eigen edits</b><small>Leg de stijl van je eigen beste video's vast.</small></div>
+					<div class="mode" data-mode="concurrent"><b>Stijl van een concurrent</b><small>Gebruik schermopnames van iemand wiens edits je goed vindt.</small></div>
+				</div>
+				<div class="drop" id="refDrop">
+					<div class="ico">⬇</div>
+					<div class="big">Sleep 1 tot 3 voorbeeldvideo's hierheen</div>
+					<div class="sub">of klik om te kiezen · .mp4 of .mov · schermopnames van Instagram of TikTok werken ook</div>
+					<input type="file" id="refFiles" accept="video/*" multiple hidden />
+				</div>
+				<div class="files" id="refList"></div>
+			</div>
+			<div class="fields">
+				<div><label for="sNaam">Naam van je stijl</label><input type="text" id="sNaam" placeholder="Bijv. Mijn podcast-stijl" /></div>
+				<div class="conc" style="display:none"><label for="sBron">Account of naam van de concurrent</label><input type="text" id="sBron" placeholder="@account (alleen ter context, komt niet in de stijl)" /></div>
+				<div class="conc" style="display:none"><label for="sLink">Link naar een video (optioneel)</label><input type="text" id="sLink" placeholder="https://www.instagram.com/reel/…" /></div>
+				<div><label for="sWens">Wat vind je goed aan deze stijl?</label><textarea id="sWens" placeholder="Bijv. de snelle cuts, de ondertitels met één kleur, de animaties met schermopnames…"></textarea></div>
+				<div class="progress" id="sProg" style="display:none"><div class="row meta"><span id="sProgT">Uploaden…</span><span id="sProgP">0%</span></div><div class="bar"><div id="sProgB"></div></div></div>
+				<button class="btn primary" id="sGo" disabled>Bouw mijn stijl</button>
+			</div>
+		</div>
+
+		<h2>Stijlen</h2>
+		<p class="lead">Je eigen stijlen en de ingebouwde stijlen. Elke stijl is meteen te kiezen bij Video editen.</p>
+		<div class="stylegrid" id="stylegrid"></div>
+	</section>
+
+	<!-- ============ VIDEO EDITEN ============ -->
+	<section class="page" id="page-editen">
+		<div class="kaart hero">
+			<div class="lbl"><i>II</i><s></s>Video editen</div>
+			<h1>Upload één opname. <em>Krijg elke stijl.</em></h1>
+			<p>Claude kiest per zin je beste take, knipt de pauzes eruit, maakt ondertitels en animaties op maat en exporteert een reel van 1080×1920 in elke stijl die je kiest.</p>
+		</div>
+		<div class="kaart panel two">
+			<div>
+				<div class="drop" id="vDrop">
+					<div class="ico">🎙</div>
+					<div class="big">Sleep je opname hierheen</div>
+					<div class="sub">of klik om te kiezen · de ruwe opname met al je takes, rechtop gefilmd</div>
+					<div style="font-weight:600;color:var(--accent);margin-top:8px" id="vName"></div>
+					<input type="file" id="vFile" accept="video/*" hidden />
+				</div>
+				<div style="margin-top:18px"><label>Stijlen</label><div class="pick" id="vPick"></div></div>
+			</div>
+			<div class="fields">
+				<div><label for="vTitel">Titel</label><input type="text" id="vTitel" placeholder="Bijv. 3 gratis SEO-tools" /></div>
+				<div><label for="vNotes">Notities voor Claude</label><textarea id="vNotes" placeholder="Trefwoord voor de reactie (bijv. SEO), links naar de tool, wat je wilt benadrukken…"></textarea></div>
+				<div><label for="vTerms">Vaktermen (helpt de transcriptie)</label><input type="text" id="vTerms" placeholder="Claude Code, GitHub, R7N Growth…" /></div>
+				<div class="progress" id="vProg" style="display:none"><div class="row meta"><span id="vProgT">Uploaden…</span><span id="vProgP">0%</span></div><div class="bar"><div id="vProgB"></div></div></div>
+				<button class="btn primary" id="vGo" disabled>Start met editen</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- ============ MIJN VIDEO'S ============ -->
+	<section class="page" id="page-videos">
+		<h2 style="margin-top:30px">Mijn video's</h2>
+		<p class="lead">Volg live wat Claude doet. Klaar? Bekijk, download en lees het rapport.</p>
+		<div id="jobs"></div>
+	</section>
+
+	<!-- ============ HANDLEIDING ============ -->
+	<section class="page" id="page-hulp">
+		<div class="helpbox md" id="help" style="margin-top:26px; max-height:none"></div>
+	</section>
+
+	<footer>R7N Editing Studio · draait lokaal op je eigen Mac · je video's verlaten je computer alleen via Claude Code</footer>
+</div>
+
+<dialog id="modal"><div class="md" id="modalBody"></div></dialog>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'})[c]);
+let STIJLEN = [];
+const LABEL = {klaar: 'Klaar', bezig: 'Bezig', bouwen: 'Bouwen', mislukt: 'Mislukt', wachtrij: 'Wachtrij', gestopt: 'Gestopt', concept: 'Concept'};
+const TYPE = {ingebouwd: 'Ingebouwd', eigen: 'Eigen stijl', concurrent: 'Concurrent'};
+
+// Ingebed in Mission Control (?embed=1): logo en voettekst weg, de rest blijft gelijk.
+if (new URLSearchParams(location.search).get('embed')) document.body.classList.add('embed');
+
+// ---------- navigatie ----------
+function route() {
+	const p = (location.hash.replace('#/', '') || 'stijl').split('/')[0];
+	const page = {'': 'stijl', editen: 'editen', videos: 'videos', hulp: 'hulp'}[p] || 'stijl';
+	$$('.page').forEach((e) => e.classList.toggle('on', e.id === 'page-' + page));
+	$$('nav a').forEach((a) => a.classList.toggle('on', a.dataset.page === page));
+	if (page === 'hulp') loadHelp();
+	window.scrollTo({top: 0});
+}
+addEventListener('hashchange', route);
+
+// ---------- status ----------
+async function loadStatus() {
+	const s = await fetch('/api/status').then((r) => r.json());
+	setClaude(s.claude);
+	const q = $('#queueChip');
+	q.querySelector('.dot').className = 'dot' + (s.actief ? ' busy' : '');
+	q.lastElementChild.textContent = s.actief ? `${s.actief} bezig · ${s.wachtrij} wachtend` : 'Wachtrij leeg';
+}
+function setClaude(c) {
+	const chip = $('#claudeChip');
+	chip.querySelector('.dot').className = 'dot ' + (c.ok === true ? 'ok' : c.ok === false ? 'bad' : '');
+	chip.lastElementChild.textContent = c.ok === true ? 'Claude ingelogd' : c.ok === false ? 'Claude niet ingelogd' : 'Claude…';
+	$('#loginBanner').style.display = c.ok === false ? 'block' : 'none';
+	$('#loginDetail').textContent = c.ok === false ? 'Melding: ' + c.melding : '';
+}
+$('#recheck').onclick = async () => {
+	$('#recheck').textContent = 'Controleren…';
+	setClaude((await fetch('/api/status/controleer', {method: 'POST'}).then((r) => r.json())).claude);
+	$('#recheck').textContent = 'Opnieuw controleren';
+};
+
+// ---------- uploads ----------
+function upload(url, file, headers, onProgress, method = 'PUT') {
+	return new Promise((resolve, reject) => {
+		const x = new XMLHttpRequest();
+		x.open(method, url);
+		for (const [k, v] of Object.entries(headers)) x.setRequestHeader(k, v);
+		x.upload.onprogress = (e) => onProgress(e.loaded / e.total);
+		x.onload = () => (x.status === 200 ? resolve(JSON.parse(x.responseText)) : reject(new Error(x.responseText)));
+		x.onerror = () => reject(new Error('Upload mislukt'));
+		x.send(file);
+	});
+}
+function dropzone(zone, input, onFiles) {
+	zone.onclick = () => input.click();
+	input.onchange = () => onFiles([...input.files]);
+	zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('over'); };
+	zone.ondragleave = () => zone.classList.remove('over');
+	zone.ondrop = (e) => { e.preventDefault(); zone.classList.remove('over'); onFiles([...e.dataTransfer.files].filter((f) => f.type.startsWith('video') || /\.(mov|mp4|m4v)$/i.test(f.name))); };
+}
+
+// ---------- stijl bouwen ----------
+let mode = 'eigen';
+let refs = [];
+$$('.mode').forEach((m) => (m.onclick = () => {
+	mode = m.dataset.mode;
+	$$('.mode').forEach((x) => x.classList.toggle('on', x === m));
+	$$('.conc').forEach((x) => (x.style.display = mode === 'concurrent' ? 'block' : 'none'));
+}));
+dropzone($('#refDrop'), $('#refFiles'), (fs) => {
+	refs = [...refs, ...fs].slice(0, 3);
+	renderRefs();
+});
+function renderRefs() {
+	$('#refList').innerHTML = refs.map((f, i) => `<div><span>${esc(f.name)}</span><span>${(f.size / 1e6).toFixed(0)} MB · <a href="#" data-rm="${i}">verwijder</a></span></div>`).join('');
+	$$('[data-rm]').forEach((a) => (a.onclick = (e) => { e.preventDefault(); refs.splice(+a.dataset.rm, 1); renderRefs(); }));
+	refreshS();
+}
+const refreshS = () => ($('#sGo').disabled = !refs.length || !$('#sNaam').value.trim());
+$('#sNaam').oninput = refreshS;
+$('#sGo').onclick = async () => {
+	$('#sGo').disabled = true;
+	$('#sProg').style.display = 'block';
+	try {
+		const stijl = await fetch('/api/stijlen', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({naam: $('#sNaam').value.trim(), type: mode, bron: $('#sBron').value, link: $('#sLink').value, wensen: $('#sWens').value})}).then((r) => r.json());
+		if (stijl.fout) throw new Error(stijl.fout);
+		const total = refs.reduce((a, f) => a + f.size, 0);
+		let done = 0;
+		for (const f of refs) {
+			$('#sProgT').textContent = `Uploaden: ${f.name}`;
+			await upload(`/api/stijlen/${stijl.id}/referentie`, f, {'x-bestand': encodeURIComponent(f.name)}, (p) => {
+				const pct = Math.round(((done + p * f.size) / total) * 100);
+				$('#sProgB').style.width = pct + '%';
+				$('#sProgP').textContent = pct + '%';
+			});
+			done += f.size;
+		}
+		await fetch(`/api/stijlen/${stijl.id}/bouw`, {method: 'POST'});
+		$('#sProgT').textContent = 'Geüpload. Claude bouwt je stijl, zie hieronder.';
+		refs = [];
+		renderRefs();
+		$('#sNaam').value = $('#sBron').value = $('#sLink').value = $('#sWens').value = '';
+		loadStijlen(true);
+		setTimeout(() => ($('#sProg').style.display = 'none'), 3000);
+	} catch (e) {
+		$('#sProgT').textContent = 'Mislukt: ' + e.message;
+	}
+	refreshS();
+};
+
+// ---------- stijlen tonen ----------
+let lastStijlen = '';
+async function loadStijlen(force) {
+	const list = await fetch('/api/stijlen').then((r) => r.json());
+	const json = JSON.stringify(list);
+	if (json === lastStijlen && !force) return;
+	lastStijlen = json;
+	STIJLEN = list;
+	$('#stylegrid').innerHTML = list.map(styleCard).join('') || '<div class="empty">Nog geen stijlen.</div>';
+	renderPick();
+}
+function styleCard(s) {
+	const busy = ['bouwen', 'wachtrij'].includes(s.status);
+	const imgs = (s.voorbeelden || []).map((f, i) => `<img class="${i ? '' : 'on'}" src="/media/stijlen/${s.id}/voorbeeld/${encodeURIComponent(f)}" alt="">`).join('');
+	const media = imgs && s.status === 'klaar' ? imgs : `<div class="ph">${busy ? `<div style="font-weight:600">${esc(s.stap || 'Bezig')}</div><div class="bar" style="width:80%"><div style="width:${s.procent ?? 3}%"></div></div><div class="log">${(s.laatste || []).slice(-6).map((l) => esc(l.s)).join('<br>')}</div>` : s.status === 'mislukt' ? '<div class="lbl" style="color:var(--bad)">Bouwen mislukt</div>' : '<div class="lbl">Nog geen voorbeeld</div>'}</div>`;
+	const acts = [];
+	if (s.status === 'klaar') acts.push(`<a class="btn dark small" href="#/editen" data-use="${s.id}">Gebruik deze stijl</a>`);
+	if (s.type !== 'ingebouwd' && s.status === 'klaar') acts.push(`<button class="btn ghost small" data-analyse="${s.id}">Analyse</button>`);
+	if (busy) acts.push(`<button class="btn ghost small" data-sstop="${s.id}">Stop</button>`);
+	if (s.type !== 'ingebouwd' && ['mislukt', 'gestopt', 'concept', 'klaar'].includes(s.status)) acts.push(`<button class="btn ghost small" data-sbouw="${s.id}">${s.status === 'klaar' ? 'Opnieuw bouwen' : 'Bouwen'}</button>`);
+	if (s.type !== 'ingebouwd' && !busy) acts.push(`<button class="btn ghost small" data-sdel="${s.id}">Verwijderen</button>`);
+	return `<div class="scard"><div class="imgs">${media}</div><div class="body"><div class="top"><span class="name">${esc(s.naam)}</span><span class="badge ${s.status === 'klaar' ? s.type : s.status}">${s.status === 'klaar' ? TYPE[s.type] : LABEL[s.status] || s.status}</span></div><div class="desc">${esc(s.beschrijving || (busy ? 'Claude analyseert je voorbeelden en bouwt de stijl. Dit duurt meestal 20 tot 40 minuten.' : ''))}</div>${(s.kenmerken || []).length ? `<div class="tags">${s.kenmerken.map((k) => `<span class="tag">${esc(k)}</span>`).join('')}</div>` : ''}${s.fout ? `<div class="err">${esc(s.fout)}</div>` : ''}<div class="actions">${acts.join('')}</div></div></div>`;
+}
+setInterval(() => {
+	for (const box of $$('.scard .imgs')) {
+		const imgs = [...box.querySelectorAll('img')];
+		if (imgs.length < 2) continue;
+		const i = imgs.findIndex((x) => x.classList.contains('on'));
+		imgs[i].classList.remove('on');
+		imgs[(i + 1) % imgs.length].classList.add('on');
+	}
+}, 1800);
+
+// ---------- video editen ----------
+let vFile = null;
+const picked = new Set();
+let pickInit = false;
+dropzone($('#vDrop'), $('#vFile'), (fs) => {
+	vFile = fs[0];
+	if (!vFile) return;
+	$('#vName').textContent = `${vFile.name} · ${(vFile.size / 1e6).toFixed(0)} MB`;
+	if (!$('#vTitel').value) $('#vTitel').value = vFile.name.replace(/\.[^.]+$/, '');
+	refreshV();
+});
+function renderPick() {
+	const ready = STIJLEN.filter((s) => s.status === 'klaar');
+	if (!pickInit && ready.length) {
+		ready.filter((s) => s.type === 'ingebouwd').forEach((s) => picked.add(s.id));
+		pickInit = true;
+	}
+	$('#vPick').innerHTML = ready.map((s) => `<label class="pickc ${picked.has(s.id) ? 'on' : ''}" data-pick="${s.id}"><input type="checkbox" ${picked.has(s.id) ? 'checked' : ''}><img src="/media/stijlen/${s.id}/voorbeeld/${encodeURIComponent((s.voorbeelden || [])[0] || '')}" alt=""><span>${esc(s.naam)}</span></label>`).join('');
+	$$('[data-pick]').forEach((l) => (l.querySelector('input').onchange = (e) => {
+		e.target.checked ? picked.add(l.dataset.pick) : picked.delete(l.dataset.pick);
+		l.classList.toggle('on', e.target.checked);
+		refreshV();
+	}));
+	refreshV();
+}
+const refreshV = () => ($('#vGo').disabled = !vFile || !picked.size);
+$('#vGo').onclick = async () => {
+	$('#vGo').disabled = true;
+	$('#vProg').style.display = 'block';
+	try {
+		await upload('/api/videos', vFile, {'x-bestand': encodeURIComponent(vFile.name), 'x-titel': encodeURIComponent($('#vTitel').value), 'x-notities': encodeURIComponent($('#vNotes').value), 'x-vaktermen': encodeURIComponent($('#vTerms').value), 'x-stijlen': [...picked].join(',')}, (p) => {
+			$('#vProgB').style.width = Math.round(p * 100) + '%';
+			$('#vProgP').textContent = Math.round(p * 100) + '%';
+		}, 'POST');
+		vFile = null;
+		$('#vName').textContent = '';
+		$('#vTitel').value = $('#vNotes').value = $('#vTerms').value = '';
+		$('#vProg').style.display = 'none';
+		$('#vProgB').style.width = '0';
+		location.hash = '#/videos';
+		lastJobs = '';
+		loadJobs();
+	} catch (e) {
+		$('#vProgT').textContent = 'Mislukt: ' + e.message;
+	}
+	refreshV();
+};
+
+// ---------- mijn video's ----------
+let lastJobs = '';
+async function loadJobs() {
+	const jobs = await fetch('/api/videos').then((r) => r.json());
+	const json = JSON.stringify(jobs);
+	if (json === lastJobs) return;
+	if ($$('#jobs video').some((v) => !v.paused)) return;
+	lastJobs = json;
+	if (!jobs.length) return ($('#jobs').innerHTML = '<div class="empty">Nog geen video\'s. <a href="#/editen">Upload je eerste opname</a>.</div>');
+	const naam = (id) => STIJLEN.find((s) => s.id === id)?.naam || id;
+	const vb = (id) => { const s = STIJLEN.find((x) => x.id === id); return s?.voorbeelden?.[0] ? `/media/stijlen/${id}/voorbeeld/${encodeURIComponent(s.voorbeelden[0])}` : ''; };
+	$('#jobs').innerHTML = jobs.map((job) => {
+		const prep = job.voorbereiding || {};
+		const date = new Date(job.gemaakt).toLocaleString('nl-NL', {dateStyle: 'medium', timeStyle: 'short'});
+		const dur = job.duur ? ` · ${Math.floor(job.duur / 60)}:${String(Math.round(job.duur % 60)).padStart(2, '0')} opname` : '';
+		const outs = Object.entries(job.montages).map(([sid, st]) => {
+			const base = `/media/videos/${job.id}/${sid}`;
+			const media = st.status === 'klaar'
+				? `<video src="${base}/final.mp4?v=${encodeURIComponent(st.klaar || '')}" controls playsinline preload="metadata"></video>`
+				: `<img src="${vb(sid)}" alt=""><div class="overlay"><div class="step">${esc(st.stap || LABEL[st.status])}</div>${st.status === 'bezig' ? `<div class="bar"><div style="width:${st.procent ?? 3}%"></div></div>` : ''}<div class="log">${(st.laatste || []).slice(-6).map((l) => esc(l.s)).join('<br>')}</div></div>`;
+			const acts = [];
+			if (st.status === 'klaar') {
+				acts.push(`<a class="btn dark small" href="${base}/final.mp4" download="${esc(job.titel)} - ${esc(naam(sid))}.mp4">Download</a>`);
+				if (st.rapport) acts.push(`<button class="btn ghost small" data-rapport="${job.id}/${sid}">Rapport</button>`);
+			}
+			acts.push(['bezig', 'wachtrij'].includes(st.status) ? `<button class="btn ghost small" data-vstop="${job.id}/${sid}">Stop</button>` : `<button class="btn ghost small" data-vre="${job.id}/${sid}">Opnieuw</button>`);
+			const extra = st.status === 'klaar' && st.duurMs ? `<div class="meta">${Math.round(st.duurMs / 60000)} min${st.kosten ? ` · $${st.kosten.toFixed(2)}` : ''}</div>` : '';
+			return `<div class="out"><div class="media">${media}</div><div class="b"><div class="row"><b>${esc(naam(sid))}</b><span class="badge ${st.status}">${LABEL[st.status] || st.status}</span></div>${st.fout ? `<div class="err">${esc(st.fout)}</div>` : ''}${extra}<div class="actions">${acts.join('')}</div></div></div>`;
+		}).join('');
+		return `<div class="job"><div class="jobhead"><img src="/media/videos/${job.id}/gedeeld/miniatuur.jpg" onerror="this.style.visibility='hidden'" alt=""><div class="t"><b>${esc(job.titel)}</b><div class="meta">${date}${dur} · voorbereiding: ${esc(prep.stap || '')}</div>${job.fragment ? `<div class="quote">“${esc(job.fragment)}”</div>` : ''}${prep.fout ? `<div class="err">${esc(prep.fout)}</div>` : ''}</div><button class="btn ghost small" data-vdel="${job.id}">Verwijderen</button></div><div class="outs">${outs}</div></div>`;
+	}).join('');
+}
+
+// ---------- knoppen ----------
+document.addEventListener('click', async (e) => {
+	const t = e.target.closest('[data-use],[data-analyse],[data-sstop],[data-sbouw],[data-sdel],[data-rapport],[data-vstop],[data-vre],[data-vdel]');
+	if (!t) return;
+	const d = t.dataset;
+	if (d.use) { picked.clear(); picked.add(d.use); renderPick(); return; }
+	if (d.analyse) return showMd(await fetch(`/media/stijlen/${d.analyse}/analyse.md`).then((r) => (r.ok ? r.text() : 'Geen analyse gevonden.')));
+	if (d.rapport) return showMd(await fetch(`/media/videos/${d.rapport}/rapport.md`).then((r) => r.text()));
+	if (d.sstop && confirm('Het bouwen van deze stijl stoppen?')) await fetch(`/api/stijlen/${d.sstop}/stop`, {method: 'POST'});
+	if (d.sbouw) await fetch(`/api/stijlen/${d.sbouw}/bouw`, {method: 'POST'});
+	if (d.sdel && confirm('Deze stijl verwijderen? Hij gaat naar stijlen/.prullenbak-…')) await fetch(`/api/stijlen/${d.sdel}`, {method: 'DELETE'});
+	if (d.vstop && confirm('Deze montage stoppen?')) { const [j, s] = d.vstop.split('/'); await fetch(`/api/videos/${j}/stop/${s}`, {method: 'POST'}); }
+	if (d.vre) { const [j, s] = d.vre.split('/'); await fetch(`/api/videos/${j}/opnieuw/${s}`, {method: 'POST'}); }
+	if (d.vdel && confirm('Deze video uit de studio halen? De bestanden gaan naar videos/.prullenbak-…')) await fetch(`/api/videos/${d.vdel}`, {method: 'DELETE'});
+	lastJobs = '';
+	loadStijlen(true);
+	loadJobs();
+});
+function showMd(md) {
+	$('#modalBody').innerHTML = renderMd(md) + '<p><button class="btn ghost" onclick="document.querySelector(\'#modal\').close()">Sluiten</button></p>';
+	$('#modal').showModal();
+}
+$('#modal').onclick = (e) => { if (e.target.id === 'modal') e.target.close(); };
+
+// ---------- handleiding ----------
+let helpLoaded = false;
+async function loadHelp() {
+	if (helpLoaded) return;
+	$('#help').innerHTML = renderMd(await fetch('/api/handleiding').then((r) => r.text()));
+	helpLoaded = true;
+}
+function renderMd(md) {
+	const lines = md.split('\n');
+	let html = '', list = null, code = false, table = [];
+	const inline = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+	const flushTable = () => {
+		if (!table.length) return;
+		const rows = table.filter((r) => !/^\|\s*-/.test(r)).map((r) => r.replace(/^\||\|$/g, '').split('|').map((c) => inline(c.trim())));
+		html += '<table>' + rows.map((r, i) => '<tr>' + r.map((c) => (i ? `<td>${c}</td>` : `<th>${c}</th>`)).join('') + '</tr>').join('') + '</table>';
+		table = [];
+	};
+	for (const l of lines) {
+		if (l.startsWith('```')) { if (code) { html += '</pre>'; code = false; } else { flushTable(); html += '<pre>'; code = true; } continue; }
+		if (code) { html += esc(l) + '\n'; continue; }
+		if (/^\|/.test(l)) { table.push(l); continue; } else flushTable();
+		const li = l.match(/^\s*(?:[-*]|\d+\.)\s+(.*)/);
+		if (li) { const tag = /^\s*\d+\./.test(l) ? 'ol' : 'ul'; if (list !== tag) { if (list) html += `</${list}>`; html += `<${tag}>`; list = tag; } html += `<li>${inline(li[1])}</li>`; continue; }
+		if (list) { html += `</${list}>`; list = null; }
+		const h = l.match(/^(#{1,3}) (.*)/);
+		if (h) html += `<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`;
+		else if (l.trim()) html += `<p>${inline(l)}</p>`;
+	}
+	flushTable();
+	return html + (list ? `</${list}>` : '') + (code ? '</pre>' : '');
+}
+
+route();
+loadStatus();
+loadStijlen().then(loadJobs);
+setInterval(() => { loadStijlen(); loadJobs(); }, 2500);
+setInterval(loadStatus, 8000);
+</script>
+</body>
+</html>

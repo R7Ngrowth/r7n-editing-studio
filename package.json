@@ -1,0 +1,10 @@
+{
+  "name": "r7n-editing-studio",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "R7N Editing Studio: bouw je eigen editingstijl en laat Claude Code je reels monteren, lokaal op je Mac",
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}

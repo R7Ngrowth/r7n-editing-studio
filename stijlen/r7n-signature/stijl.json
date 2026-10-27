@@ -1,0 +1,21 @@
+{
+  "id": "r7n-signature",
+  "naam": "R7N Signature",
+  "beschrijving": "Donkere reel met oranje accent: jij in een box onderin, daarboven kaarten met echte bronnen (screenshots, terminals, tellers), ondertitels woord voor woord met serif-accenten en een gloeiende afsluiter.",
+  "kenmerken": [
+    "donker + oranje",
+    "woord-voor-woord",
+    "kaarten met bronnen",
+    "tellers en terminals",
+    "gloeiende afsluiter"
+  ],
+  "type": "ingebouwd",
+  "status": "klaar",
+  "volgorde": 0,
+  "voorbeelden": [
+    "frame-0.5.jpg",
+    "frame-2.9.jpg",
+    "frame-6.9.jpg",
+    "frame-11.6.jpg"
+  ]
+}
