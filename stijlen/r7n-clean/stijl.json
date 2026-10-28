@@ -1,0 +1,10 @@
+{
+  "id": "r7n-clean",
+  "naam": "R7N Clean",
+  "beschrijving": "Luchtige Apple-look: veel wit, één blauw accent, 50/50-split met jou onderin, chatpaneel dat meetypt, 3D-achtige iconen en zachte schaduwen. Voor apps en productiviteit.",
+  "kenmerken": ["wit + blauw", "50/50-split", "chatpaneel typt mee", "zachte schaduwen", "ronde knoppen"],
+  "type": "ingebouwd",
+  "status": "klaar",
+  "volgorde": 2,
+  "voorbeelden": ["frame-0.5.jpg", "frame-2.9.jpg", "frame-6.9.jpg", "frame-11.6.jpg"]
+}

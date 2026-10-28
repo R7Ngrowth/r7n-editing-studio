@@ -5,7 +5,7 @@
 ## Wat het doet
 - **Video editen** — ruwe opname met alle takes erin → per gekozen stijl een kant-en-klare reel, met een rapport (gekozen takes, correcties, wat je beter opnieuw opneemt).
 - **Bouw je stijl** — 1 tot 3 voorbeeldvideo's (eigen edits of schermopnames van een concurrent) → een herbruikbare stijl met een werkend sjabloon.
-- **R7N Signature** — ingebouwde stijl: donker met oranje accent, jij in een box, kaarten met echte bronnen, woord-voor-woord ondertitels, gloeiende afsluiter.
+- **Drie ingebouwde stijlen** — *R7N Signature* (donker, oranje, kaarten met echte bronnen), *R7N Paper* (licht papier, rollende cijfers, lijstjes) en *R7N Clean* (Apple-look, 50/50-split, chatpaneel). Elke stijl is een Remotion-sjabloon dat je kunt aanpassen.
 - **Mission Control** — gebruik je R7N Mission Control, dan zit de studio daar onder *Editing Studio*.
 
 ## Starten

@@ -41,13 +41,20 @@ Bij een concurrent legt Claude alleen de *editingstijl* vast (lay-out, ritme, le
 ## 5. Een video laten monteren (Video editen)
 1. **Opnemen:** rechtop, telefoon op ooghoogte, kijk in de lens. Spreek je script in; meerdere takes per zin mag, Claude kiest de beste.
 2. **Uploaden:** sleep de ruwe opname in het vak.
-3. **Stijlen kiezen:** de ingebouwde stijl staat aan; je eigen stijlen klik je erbij.
+3. **Stijlen kiezen:** de drie ingebouwde stijlen staan aan; zet uit wat je niet nodig hebt en klik je eigen stijlen erbij. Elke stijl is een aparte montage (en aparte Claude-tijd).
 4. **Aanvullen:** titel, **notities** (het trefwoord voor "reageer met …", links, wat je wilt benadrukken) en **vaktermen** (namen van tools, zodat de ondertitels ze goed schrijven).
 5. Klik op **Start met editen**. Bij **Mijn video's** zie je per stijl wat Claude doet.
 6. Klaar? Bekijk, **Download** en lees het **Rapport**: welke takes zijn gekozen, wat er in de ondertitels is aangepast en wat je beter opnieuw opneemt. Niet goed? **Opnieuw**.
 
-## De ingebouwde stijl
-**R7N Signature**: donker met oranje accent. Jij in een afgeronde box onderin, daarboven kaarten met echte bronnen (screenshots, browser, terminal, tellers, lijstjes, citaten), ondertitels die woord voor woord verschijnen met cursieve accenten, en een beeldvullende afsluiter met een gloeiend trefwoord. Goed voor tech-, AI- en ondernemersnieuws. Eigen stijlen bouwt Claude hierop voort.
+## De ingebouwde stijlen
+
+| Stijl | Kenmerken | Goed voor |
+|---|---|---|
+| **R7N Signature** | donker met oranje accent, jij in een box, kaarten met echte bronnen (screenshots, browser, terminal, tellers), ondertitels woord voor woord met cursieve accenten, gloeiende afsluiter | tech-, AI- en ondernemersnieuws |
+| **R7N Paper** | licht en warm als papier, donkere inkt, rollende cijfers, lijstkaarten met iconen, notitieblok, serif-kapitalen | lijstjes en tools ("3 gratis tools…") |
+| **R7N Clean** | luchtige Apple-look, veel wit en één blauw accent, 50/50-split, chatpaneel dat meetypt, zachte schaduwen | apps, assistenten en productiviteit |
+
+Eigen stijlen bouwt Claude voort op de stijl die er het dichtst bij ligt.
 
 ## Instellingen (studio.config.json)
 | instelling | betekenis |

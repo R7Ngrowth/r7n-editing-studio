@@ -1,0 +1,7 @@
+node_modules
+out/
+public/speaker.mp4
+public/speaker.wav
+public/speaker.json
+public/speaker_alpha.mov
+analyse/

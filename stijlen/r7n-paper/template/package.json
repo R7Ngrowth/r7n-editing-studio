@@ -1,0 +1,11 @@
+{
+  "name": "r7n-signature",
+  "private": true,
+  "type": "module",
+  "description": "R7N Signature: Remotion-sjabloon voor reels (1080×1920, 30 fps). node_modules wijst naar de engine van de studio.",
+  "scripts": {
+    "preview": "remotion studio src/index.ts",
+    "stills": "node tools/stills.mjs",
+    "export": "zsh tools/export.sh"
+  }
+}

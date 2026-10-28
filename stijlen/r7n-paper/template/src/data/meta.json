@@ -1,0 +1,6 @@
+{
+  "titel": "Demo",
+  "fps": 30,
+  "durationInFrames": 300,
+  "spreker": { "focus": [0.5, 0.3], "zoomBox": 1.0, "zoomClose": 1.6, "alpha": false }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "r7n-paper",
+  "naam": "R7N Paper",
+  "beschrijving": "Licht en warm, als papier: donkere inkt, oranje accent, rollende cijfers, lijstkaarten met iconen en serif-kapitalen. Jij in een papieren kaart onderin.",
+  "kenmerken": ["licht + beige papier", "rollende cijfers", "lijstjes met iconen", "serif-kapitalen", "notitieblok"],
+  "type": "ingebouwd",
+  "status": "klaar",
+  "volgorde": 1,
+  "voorbeelden": ["frame-0.5.jpg", "frame-2.9.jpg", "frame-6.9.jpg", "frame-11.6.jpg"]
+}
