@@ -185,6 +185,6 @@ export function Card({ kaart, t, sceneStart }: { kaart: Kaart; t: number; sceneS
     case "title":
       return <Titel {...kaart} t={t - sceneStart} />;
     default:
-      return <>{Extra({ kaart, t })}</>;
+      return <Extra kaart={kaart} t={t} sceneStart={sceneStart} />;
   }
 }

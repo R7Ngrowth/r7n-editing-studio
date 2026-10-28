@@ -46,6 +46,8 @@ export type Kaart =
   | { type: "headline"; regels: { t: string; accent?: boolean }[]; start: number; icoon?: "zoek" | "ster" | "pijl" | "vink" }
   | { type: "pixel"; label?: string; tekst: string; start: number; icoon?: string; sub?: string }
   | { type: "toggle"; naam: string; van?: string; naar?: string; start: number }
-  | { type: "installer"; titel: string; start: number; duur?: number; stappen?: { t: string; start: number }[] };
+  | { type: "installer"; titel: string; start: number; duur?: number; stappen?: { t: string; start: number }[] }
+  // --- beeldmateriaal van de maker (schermopname, b-roll): speelt zonder geluid af vanaf `vanaf` seconden in de clip ---
+  | { type: "clip"; src: string; vanaf?: number; kader?: "kaart" | "telefoon" | "laptop" | "vol"; markeer?: Markeer[] };
 
 export type Scene = { start: number; layout: Layout; kaart: Kaart };

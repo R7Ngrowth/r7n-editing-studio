@@ -1,7 +1,7 @@
 // Extra kaarten, gelijk in alle R7N-stijlen. Ze nemen kleuren, letters en kaartvorm over uit theme.ts en ui.tsx van de stijl.
-// tweet · device · keys · mail · checklist · voice · ring · logos · ranking · headline · pixel · toggle · installer
+// tweet · device · clip · keys · mail · checklist · voice · ring · logos · ranking · headline · pixel · toggle · installer
 import type { CSSProperties, ReactNode } from "react";
-import { Img, staticFile } from "remotion";
+import { Img, OffthreadVideo, Sequence, staticFile, useVideoConfig } from "remotion";
 import { ease, font, kleur, stijl } from "../theme";
 import type { Kaart } from "../types";
 import { Frame, Pil, nlGetal } from "../ui";
@@ -138,6 +138,18 @@ function Icoon({ soort, t, start }: { soort: "zoek" | "ster" | "pijl" | "vink"; 
   );
 }
 
+// Afbeelding of video (beeldmateriaal). Een video speelt zonder geluid af vanaf `vanaf` seconden, gerekend vanaf `vanafT` in de reel.
+const isVideo = (src: string) => /\.(mp4|mov|m4v|webm)$/i.test(src);
+function Media({ src, vanafT, vanaf = 0, style }: { src: string; vanafT: number; vanaf?: number; style: CSSProperties }) {
+  const { fps } = useVideoConfig();
+  if (!isVideo(src)) return <Img src={staticFile(src)} style={style} />;
+  return (
+    <Sequence from={Math.round(vanafT * fps)} layout="none">
+      <OffthreadVideo src={staticFile(src)} muted startFrom={Math.round(vanaf * fps)} style={style} />
+    </Sequence>
+  );
+}
+
 // ---------- kaarten ----------
 function Tweet({ k, t }: { k: Extract<Kaart, { type: "tweet" }>; t: number }) {
   // De tekst opdelen rond de gemarkeerde zinnen; markeringen vegen van links naar rechts in.
@@ -198,8 +210,8 @@ function Device({ k, t }: { k: Extract<Kaart, { type: "device" }>; t: number }) 
   const q = p(t, huidig?.start ?? 0, 0.35);
   const scherm = (
     <div style={{ ...vul, overflow: "hidden", background: "#000", borderRadius: k.soort === "telefoon" ? 54 : 10 }}>
-      {vorige && <Img src={staticFile(vorige.src)} style={{ ...vul, width: "100%", height: "100%", objectFit: "cover" }} />}
-      {huidig && <Img src={staticFile(huidig.src)} style={{ ...vul, width: "100%", height: "100%", objectFit: "cover", opacity: q, filter: `blur(${(1 - q) * 14}px)` }} />}
+      {vorige && <Media src={vorige.src} vanafT={vorige.start} style={{ ...vul, width: "100%", height: "100%", objectFit: "cover" }} />}
+      {huidig && <Media src={huidig.src} vanafT={huidig.start} style={{ ...vul, width: "100%", height: "100%", objectFit: "cover", opacity: q, filter: `blur(${(1 - q) * 14}px)` }} />}
     </div>
   );
   const pil = k.pil && t >= k.pil.start && (
@@ -233,6 +245,35 @@ function Device({ k, t }: { k: Extract<Kaart, { type: "device" }>; t: number }) 
       <div style={{ width: 300, height: 14, borderRadius: 7, background: "#2a2c33" }} />
       {pil}
     </div>
+  );
+}
+
+function Clip({ k, t, sceneStart }: { k: Extract<Kaart, { type: "clip" }>; t: number; sceneStart: number }) {
+  const beeld = <Media src={k.src} vanafT={sceneStart} vanaf={k.vanaf} style={{ ...vul, width: "100%", height: "100%", objectFit: k.kader === "vol" ? "cover" : "contain", background: "#000" }} />;
+  const markeringen = (k.markeer ?? [])
+    .filter((m) => t >= m.start)
+    .map((m, i) => {
+      const q = p(t, m.start, 0.3);
+      return (
+        <div key={i} style={{ position: "absolute", left: `${m.x * 100}%`, top: `${m.y * 100}%`, width: `${m.w * 100}%`, height: `${m.h * 100}%`, opacity: q, transform: `scale(${1.15 - 0.15 * q})`, border: `5px solid ${kleur.accent}`, borderRadius: 14, boxShadow: `0 0 0 6px ${kleur.accent}33` }}>
+          {m.label && <div style={{ position: "absolute", left: 0, top: "100%", marginTop: 12 }}><Pil>{m.label}</Pil></div>}
+        </div>
+      );
+    });
+  if (k.kader === "telefoon" || k.kader === "laptop")
+    return <Device k={{ type: "device", soort: k.kader, schermen: [{ src: k.src, start: sceneStart }] }} t={t} />;
+  if (k.kader === "vol")
+    return (
+      <div style={{ ...vul, borderRadius: 24, overflow: "hidden" }}>
+        {beeld}
+        {markeringen}
+      </div>
+    );
+  return (
+    <Frame style={{ background: "#000" }}>
+      {beeld}
+      {markeringen}
+    </Frame>
   );
 }
 
@@ -498,12 +539,14 @@ function Installer({ k, t }: { k: Extract<Kaart, { type: "installer" }>; t: numb
 }
 
 /** Tekent een extra kaartsoort; geeft null voor soorten die Card.tsx zelf tekent. */
-export function Extra({ kaart, t }: { kaart: Kaart; t: number }): ReactNode {
+export function Extra({ kaart, t, sceneStart = 0 }: { kaart: Kaart; t: number; sceneStart?: number }): ReactNode {
   switch (kaart.type) {
     case "tweet":
       return <Tweet k={kaart} t={t} />;
     case "device":
       return <Device k={kaart} t={t} />;
+    case "clip":
+      return <Clip k={kaart} t={t} sceneStart={sceneStart} />;
     case "keys":
       return <Keys k={kaart} t={t} />;
     case "mail":

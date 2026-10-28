@@ -137,6 +137,28 @@ h2 { font-family: var(--serif); font-weight: 400; font-size: 30px; letter-spacin
 .log { font: 11.5px/1.45 var(--mono); color: #aeb6c8; max-height: 8.7em; overflow: hidden; text-align: left; width: 100%; }
 .err { font-size: 12.5px; color: var(--bad); white-space: pre-wrap; max-height: 7em; overflow: auto; }
 
+/* clips bij video editen */
+.clips { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.clip { display: flex; align-items: center; gap: 10px; padding: 9px 10px 9px 14px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line); font-size: 13.5px; }
+.clip .nr { font-family: var(--mono); color: var(--accent); width: 22px; }
+.clip .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.clip .mb { color: var(--muted); font-family: var(--mono); font-size: 11.5px; }
+.rol { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.rol button { border: 0; background: transparent; color: var(--muted); padding: 5px 9px; font-size: 12px; cursor: pointer; }
+.rol button.on { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); }
+.ikoon { border: 0; background: transparent; color: var(--muted); cursor: pointer; padding: 4px 6px; border-radius: 6px; font-size: 14px; }
+.ikoon:hover { color: var(--text); background: var(--surface); }
+.ikoon:disabled { opacity: .3; cursor: default; }
+.hint { color: var(--muted); font-size: 12.5px; line-height: 1.45; margin-top: 8px; }
+/* inspreken */
+.metmic { position: relative; }
+.metmic textarea { padding-right: 52px; }
+.mic { position: absolute; right: 8px; bottom: 10px; width: 38px; height: 38px; border-radius: 19px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.mic:hover { color: var(--accent); border-color: var(--accent); }
+.mic.op { background: var(--bad); border-color: var(--bad); color: #fff; animation: pulse 1.2s infinite; }
+.mic.bezig { color: var(--accent); border-color: var(--accent); animation: pulse 1.2s infinite; }
+.micstatus { font-size: 12px; color: var(--muted); margin-top: 6px; min-height: 16px; font-family: var(--mono); }
+
 /* stijlkiezer bij video editen */
 .pick { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
 .pickc { position: relative; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; cursor: pointer; background: var(--surface-2); transition: border-color .15s; }
@@ -212,7 +234,7 @@ footer { color: var(--muted); font-size: 12px; margin-top: 50px; text-align: cen
 			<h1>Bouw je eigen <em>editingstijl</em>.</h1>
 			<p>Upload een paar video's met de stijl die je wilt: je eigen edits of die van een concurrent. Claude analyseert lay-out, ondertitels, animaties en ritme, en maakt er een stijl van die al je nieuwe opnames automatisch zo monteert.</p>
 			<div class="steps">
-				<div class="step"><i>1</i><b>Upload voorbeelden</b><span>1 tot 3 video's of schermopnames van reels in de stijl die je zoekt.</span></div>
+				<div class="step"><i>1</i><b>Upload voorbeelden</b><span>1 tot 5 video's of schermopnames van reels in de stijl die je zoekt.</span></div>
 				<div class="step"><i>2</i><b>Claude bouwt je stijl</b><span>Analyse, eigen ondertitels en animaties, een werkend sjabloon en voorbeeldbeelden.</span></div>
 				<div class="step"><i>3</i><b>Edit je video's</b><span>Upload een ruwe opname en krijg hem terug in al je stijlen.</span></div>
 			</div>
@@ -225,7 +247,7 @@ footer { color: var(--muted); font-size: 12px; margin-top: 50px; text-align: cen
 				</div>
 				<div class="drop" id="refDrop">
 					<div class="ico">⬇</div>
-					<div class="big">Sleep 1 tot 3 voorbeeldvideo's hierheen</div>
+					<div class="big">Sleep 1 tot 5 voorbeeldvideo's hierheen</div>
 					<div class="sub">of klik om te kiezen · .mp4 of .mov · schermopnames van Instagram of TikTok werken ook</div>
 					<input type="file" id="refFiles" accept="video/*" multiple hidden />
 				</div>
@@ -235,7 +257,7 @@ footer { color: var(--muted); font-size: 12px; margin-top: 50px; text-align: cen
 				<div><label for="sNaam">Naam van je stijl</label><input type="text" id="sNaam" placeholder="Bijv. Mijn podcast-stijl" /></div>
 				<div class="conc" style="display:none"><label for="sBron">Account of naam van de concurrent</label><input type="text" id="sBron" placeholder="@account (alleen ter context, komt niet in de stijl)" /></div>
 				<div class="conc" style="display:none"><label for="sLink">Link naar een video (optioneel)</label><input type="text" id="sLink" placeholder="https://www.instagram.com/reel/…" /></div>
-				<div><label for="sWens">Wat vind je goed aan deze stijl?</label><textarea id="sWens" placeholder="Bijv. de snelle cuts, de ondertitels met één kleur, de animaties met schermopnames…"></textarea></div>
+				<div><label for="sWens">Waar moet Claude op letten?</label><div class="metmic"><textarea id="sWens" placeholder="Typ of spreek in: wat vind je goed aan deze video's, waar moet Claude extra goed naar kijken (bijv. de snelle cuts in video 2, de ondertitels in video 4)…"></textarea><button type="button" class="mic" data-mic="sWens" title="Inspreken">🎙</button></div><div class="micstatus" data-micstatus="sWens"></div></div>
 				<div class="progress" id="sProg" style="display:none"><div class="row meta"><span id="sProgT">Uploaden…</span><span id="sProgP">0%</span></div><div class="bar"><div id="sProgB"></div></div></div>
 				<button class="btn primary" id="sGo" disabled>Bouw mijn stijl</button>
 			</div>
@@ -250,23 +272,24 @@ footer { color: var(--muted); font-size: 12px; margin-top: 50px; text-align: cen
 	<section class="page" id="page-editen">
 		<div class="kaart hero">
 			<div class="lbl"><i>II</i><s></s>Video editen</div>
-			<h1>Upload één opname. <em>Krijg elke stijl.</em></h1>
-			<p>Claude kiest per zin je beste take, knipt de pauzes eruit, maakt ondertitels en animaties op maat en exporteert een reel van 1080×1920 in elke stijl die je kiest.</p>
+			<h1>Upload je opnames. <em>Krijg elke stijl.</em></h1>
+			<p>Eén opname of meerdere clips: Claude plakt ze in jouw volgorde aan elkaar, kiest per zin je beste take, knipt de pauzes eruit, maakt ondertitels en animaties op maat en exporteert een reel van 1080×1920 in elke stijl die je kiest.</p>
 		</div>
 		<div class="kaart panel two">
 			<div>
 				<div class="drop" id="vDrop">
 					<div class="ico">🎙</div>
-					<div class="big">Sleep je opname hierheen</div>
-					<div class="sub">of klik om te kiezen · de ruwe opname met al je takes, rechtop gefilmd</div>
-					<div style="font-weight:600;color:var(--accent);margin-top:8px" id="vName"></div>
-					<input type="file" id="vFile" accept="video/*" hidden />
+					<div class="big">Sleep je opname of clips hierheen</div>
+					<div class="sub">of klik om te kiezen · één of meer opnames met al je takes, rechtop gefilmd · schermopnames mogen er ook bij</div>
+					<input type="file" id="vFile" accept="video/*" multiple hidden />
 				</div>
+				<div class="clips" id="vClips"></div>
+				<div class="hint" id="vHint" style="display:none"><b>Ik</b> = jouw opname: die plakt Claude in deze volgorde aan elkaar. <b>Beeld</b> = beeldmateriaal (bijv. een schermopname): dat laat Claude in een kaart, telefoon of laptop zien terwijl jij praat.</div>
 				<div style="margin-top:18px"><label>Stijlen</label><div class="pick" id="vPick"></div></div>
 			</div>
 			<div class="fields">
 				<div><label for="vTitel">Titel</label><input type="text" id="vTitel" placeholder="Bijv. 3 gratis SEO-tools" /></div>
-				<div><label for="vNotes">Notities voor Claude</label><textarea id="vNotes" placeholder="Trefwoord voor de reactie (bijv. SEO), links naar de tool, wat je wilt benadrukken…"></textarea></div>
+				<div><label for="vNotes">Notities voor Claude</label><div class="metmic"><textarea id="vNotes" placeholder="Typ of spreek in: trefwoord voor de reactie (bijv. SEO), links naar de tool, wat je wilt benadrukken, welke clip waar moet…"></textarea><button type="button" class="mic" data-mic="vNotes" title="Inspreken">🎙</button></div><div class="micstatus" data-micstatus="vNotes"></div></div>
 				<div><label for="vTerms">Vaktermen (helpt de transcriptie)</label><input type="text" id="vTerms" placeholder="Claude Code, GitHub, R7N Growth…" /></div>
 				<div class="progress" id="vProg" style="display:none"><div class="row meta"><span id="vProgT">Uploaden…</span><span id="vProgP">0%</span></div><div class="bar"><div id="vProgB"></div></div></div>
 				<button class="btn primary" id="vGo" disabled>Start met editen</button>
@@ -363,7 +386,7 @@ $$('.mode').forEach((m) => (m.onclick = () => {
 	$$('.conc').forEach((x) => (x.style.display = mode === 'concurrent' ? 'block' : 'none'));
 }));
 dropzone($('#refDrop'), $('#refFiles'), (fs) => {
-	refs = [...refs, ...fs].slice(0, 3);
+	refs = [...refs, ...fs].slice(0, 5);
 	renderRefs();
 });
 function renderRefs() {
@@ -438,15 +461,32 @@ setInterval(() => {
 }, 1800);
 
 // ---------- video editen ----------
-let vFile = null;
+let vClips = []; // [{file, rol: 'opname'|'beeld'}]
 const picked = new Set();
 let pickInit = false;
 dropzone($('#vDrop'), $('#vFile'), (fs) => {
-	vFile = fs[0];
-	if (!vFile) return;
-	$('#vName').textContent = `${vFile.name} · ${(vFile.size / 1e6).toFixed(0)} MB`;
-	if (!$('#vTitel').value) $('#vTitel').value = vFile.name.replace(/\.[^.]+$/, '');
+	// Een groep tegelijk gesleepte bestanden op naam (IMG_0012 vóór IMG_0013 = meestal de opnamevolgorde); daarna zelf schuiven.
+	const nieuw = [...fs].sort((a, b) => a.name.localeCompare(b.name, 'nl', {numeric: true}));
+	for (const f of nieuw) vClips.push({file: f, rol: /screen|scherm|recording/i.test(f.name) ? 'beeld' : 'opname'});
+	if (vClips.length > 200) { vClips = vClips.slice(0, 200); alert('Maximaal 200 clips per video.'); }
+	if (vClips.length && !$('#vTitel').value) $('#vTitel').value = vClips[0].file.name.replace(/\.[^.]+$/, '');
+	$('#vFile').value = '';
+	renderClips();
+});
+function renderClips() {
+	$('#vHint').style.display = vClips.length ? 'block' : 'none';
+	$('#vClips').innerHTML = vClips.map((c, i) => `<div class="clip"><span class="nr">${i + 1}</span><span class="nm" title="${esc(c.file.name)}">${esc(c.file.name)}</span><span class="mb">${(c.file.size / 1e6).toFixed(0)} MB</span><span class="rol"><button type="button" data-crol="${i}:opname" class="${c.rol === 'opname' ? 'on' : ''}">Ik</button><button type="button" data-crol="${i}:beeld" class="${c.rol === 'beeld' ? 'on' : ''}">Beeld</button></span><button type="button" class="ikoon" data-cop="${i}" ${i ? '' : 'disabled'} title="Omhoog">↑</button><button type="button" class="ikoon" data-cneer="${i}" ${i < vClips.length - 1 ? '' : 'disabled'} title="Omlaag">↓</button><button type="button" class="ikoon" data-cweg="${i}" title="Weghalen">✕</button></div>`).join('');
 	refreshV();
+}
+$('#vClips').addEventListener('click', (e) => {
+	const b = e.target.closest('button');
+	if (!b) return;
+	const d = b.dataset;
+	if (d.crol) { const [i, r] = d.crol.split(':'); vClips[+i].rol = r; }
+	if (d.cop) { const i = +d.cop; [vClips[i - 1], vClips[i]] = [vClips[i], vClips[i - 1]]; }
+	if (d.cneer) { const i = +d.cneer; [vClips[i + 1], vClips[i]] = [vClips[i], vClips[i + 1]]; }
+	if (d.cweg) vClips.splice(+d.cweg, 1);
+	renderClips();
 });
 function renderPick() {
 	const ready = STIJLEN.filter((s) => s.status === 'klaar');
@@ -462,17 +502,28 @@ function renderPick() {
 	}));
 	refreshV();
 }
-const refreshV = () => ($('#vGo').disabled = !vFile || !picked.size);
+const refreshV = () => ($('#vGo').disabled = !vClips.some((c) => c.rol === 'opname') || !picked.size);
 $('#vGo').onclick = async () => {
 	$('#vGo').disabled = true;
 	$('#vProg').style.display = 'block';
 	try {
-		await upload('/api/videos', vFile, {'x-bestand': encodeURIComponent(vFile.name), 'x-titel': encodeURIComponent($('#vTitel').value), 'x-notities': encodeURIComponent($('#vNotes').value), 'x-vaktermen': encodeURIComponent($('#vTerms').value), 'x-stijlen': [...picked].join(',')}, (p) => {
-			$('#vProgB').style.width = Math.round(p * 100) + '%';
-			$('#vProgP').textContent = Math.round(p * 100) + '%';
-		}, 'POST');
-		vFile = null;
-		$('#vName').textContent = '';
+		const video = await fetch('/api/videos', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({titel: $('#vTitel').value, notities: $('#vNotes').value, vaktermen: $('#vTerms').value})}).then((r) => r.json());
+		if (video.fout) throw new Error(video.fout);
+		const totaal = vClips.reduce((a, c) => a + c.file.size, 0) || 1;
+		let klaar = 0;
+		for (const [i, c] of vClips.entries()) {
+			$('#vProgT').textContent = vClips.length > 1 ? `Uploaden: clip ${i + 1} van ${vClips.length}` : 'Uploaden…';
+			await upload(`/api/videos/${video.id}/clip`, c.file, {'x-bestand': encodeURIComponent(c.file.name), 'x-rol': c.rol, 'x-nr': String(i + 1)}, (p) => {
+				const pct = Math.round(((klaar + p * c.file.size) / totaal) * 100);
+				$('#vProgB').style.width = pct + '%';
+				$('#vProgP').textContent = pct + '%';
+			});
+			klaar += c.file.size;
+		}
+		const st = await fetch(`/api/videos/${video.id}/start`, {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({stijlen: [...picked]})}).then((r) => r.json());
+		if (st.fout) throw new Error(st.fout);
+		vClips = [];
+		renderClips();
 		$('#vTitel').value = $('#vNotes').value = $('#vTerms').value = '';
 		$('#vProg').style.display = 'none';
 		$('#vProgB').style.width = '0';
@@ -484,6 +535,48 @@ $('#vGo').onclick = async () => {
 	}
 	refreshV();
 };
+
+// ---------- inspreken: microfoon → tekst met de spraakherkenning op deze Mac ----------
+let opname = null;
+document.addEventListener('click', async (e) => {
+	const knop = e.target.closest('[data-mic]');
+	if (!knop) return;
+	const veld = $('#' + knop.dataset.mic);
+	const status = document.querySelector(`[data-micstatus="${knop.dataset.mic}"]`);
+	if (opname && opname.knop === knop) { opname.rec.stop(); return; }
+	if (opname) return;
+	try {
+		const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+		const type = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/ogg'].find((t) => window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || '';
+		const rec = new MediaRecorder(stream, type ? {mimeType: type} : undefined);
+		const stukken = [];
+		rec.ondataavailable = (ev) => ev.data.size && stukken.push(ev.data);
+		rec.onstop = async () => {
+			stream.getTracks().forEach((t) => t.stop());
+			knop.classList.remove('op');
+			knop.classList.add('bezig');
+			status.textContent = 'Omzetten naar tekst…';
+			opname = null;
+			try {
+				const blob = new Blob(stukken, {type: rec.mimeType || 'audio/webm'});
+				const r = await fetch('/api/dicteer', {method: 'POST', headers: {'content-type': blob.type, 'x-vaktermen': encodeURIComponent($('#vTerms')?.value || '')}, body: blob}).then((x) => x.json());
+				if (r.fout) throw new Error(r.fout);
+				veld.value = (veld.value.trim() ? veld.value.trim() + ' ' : '') + r.tekst;
+				veld.dispatchEvent(new Event('input'));
+				status.textContent = r.tekst ? 'Toegevoegd. Pas gerust aan.' : 'Niets verstaan, probeer het nog eens.';
+			} catch (err) {
+				status.textContent = 'Mislukt: ' + err.message;
+			}
+			knop.classList.remove('bezig');
+		};
+		rec.start();
+		opname = {rec, knop};
+		knop.classList.add('op');
+		status.textContent = 'Opnemen… klik nog een keer om te stoppen';
+	} catch (err) {
+		status.textContent = err.name === 'NotAllowedError' ? 'Geen toegang tot de microfoon. Sta de microfoon toe in je browser.' : 'Microfoon niet beschikbaar: ' + err.message;
+	}
+});
 
 // ---------- mijn video's ----------
 let lastJobs = '';

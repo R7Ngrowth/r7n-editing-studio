@@ -31,8 +31,8 @@ Wil je dat de studio altijd aanstaat, ook na een herstart? Voer dan één keer i
 
 ## 4. Je eigen stijl bouwen (Bouw je stijl)
 1. Kies **Mijn eigen edits** (je beste gemonteerde video's) of **Stijl van een concurrent** (schermopnames van reels die je mooi vindt; account en link zijn alleen context voor Claude).
-2. Sleep 1 tot 3 video's in het vak. Een schermopname van je telefoon is prima.
-3. Geef de stijl een naam en schrijf wat je er goed aan vindt.
+2. Sleep 1 tot 5 video's in het vak. Een schermopname van je telefoon is prima.
+3. Geef de stijl een naam en typ of spreek in (🎙) waar Claude op moet letten, bijvoorbeeld "kijk goed naar de cuts in video 2". Die aanwijzingen zijn leidend.
 4. Klik op **Bouw mijn stijl**. Claude analyseert lay-out, ritme, ondertitels, kleuren en animaties, bouwt een sjabloon, test het en maakt voorbeeldbeelden. Je kijkt live mee op de stijlkaart.
 5. Klaar? De stijl staat bij **Stijlen** en is te kiezen bij Video editen. Onder **Analyse** lees je wat Claude vastlegde.
 
@@ -40,9 +40,9 @@ Bij een concurrent legt Claude alleen de *editingstijl* vast (lay-out, ritme, le
 
 ## 5. Een video laten monteren (Video editen)
 1. **Opnemen:** rechtop, telefoon op ooghoogte, kijk in de lens. Spreek je script in; meerdere takes per zin mag, Claude kiest de beste.
-2. **Uploaden:** sleep de ruwe opname in het vak.
+2. **Uploaden:** sleep de ruwe opname in het vak, of veel korte clips tegelijk (tot 200). De studio zet ze op bestandsnaam, bij telefoonopnames meestal de opnamevolgorde; schuif met ↑ ↓ waar nodig. Claude plakt ze aan elkaar en kiest over alle clips heen de beste takes. Geef per clip aan of het **Ik** is (jouw opname) of **Beeld** (beeldmateriaal, bijv. een schermopname van een tool): beeldmateriaal laat Claude in een kaart, telefoon of laptop zien terwijl jij praat. Liggend gefilmde opnames worden automatisch staand bijgesneden.
 3. **Stijlen kiezen:** de drie ingebouwde stijlen staan aan; zet uit wat je niet nodig hebt en klik je eigen stijlen erbij. Elke stijl is een aparte montage (en aparte Claude-tijd).
-4. **Aanvullen:** titel, **notities** (het trefwoord voor "reageer met …", links, wat je wilt benadrukken) en **vaktermen** (namen van tools, zodat de ondertitels ze goed schrijven).
+4. **Aanvullen:** titel, **notities** (typ of klik op 🎙 om in te spreken; je stem wordt op je eigen Mac omgezet naar tekst) (het trefwoord voor "reageer met …", links, wat je wilt benadrukken) en **vaktermen** (namen van tools, zodat de ondertitels ze goed schrijven).
 5. Klik op **Start met editen**. Bij **Mijn video's** zie je per stijl wat Claude doet.
 6. Klaar? Bekijk, **Download** en lees het **Rapport**: welke takes zijn gekozen, wat er in de ondertitels is aangepast en wat je beter opnieuw opneemt. Niet goed? **Opnieuw**.
 

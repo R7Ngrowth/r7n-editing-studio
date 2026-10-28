@@ -14,6 +14,7 @@ function momenten(k: Kaart): Moment[] {
       return k.items.map((i) => ({ t: i.start, naam: "pop" }));
     case "image":
     case "browser":
+    case "clip":
       return (k.markeer ?? []).map((m) => ({ t: m.start, naam: "pop" }));
     case "terminal":
       return k.regels.filter((r) => r.soort === "ok" || r.soort === "weg").map((r) => ({ t: r.start, naam: "tick", niveau: 0.6 }));

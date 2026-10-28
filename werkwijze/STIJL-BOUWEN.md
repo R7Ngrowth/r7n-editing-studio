@@ -9,7 +9,7 @@ Je werkt zelfstandig: stel geen vragen, kies zelf en noteer twijfels in `analyse
 - **concurrent**: schermopnames van iemand anders. Leg alleen de *editingstijl* vast: lay-out, ritme, typografie, soorten animaties. Neem nooit beeld, audio, teksten, logo's of de naam van die persoon over. De stijlnaam en `SKILL.md` noemen geen personen of accounts.
 
 ## 1. Analyseren
-De video's staan in `referentie/`.
+De video's staan in `referentie/` (1 tot 5). **De aanwijzingen van de maker in de opdracht zijn leidend:** noemt de maker iets ("kijk goed naar de cuts in video 2", "de ondertitels van video 4"), analyseer dat extra nauwkeurig en leg het vast. Bekijk elke video apart en vergelijk ze daarna: neem over wat ze gemeen hebben, en kies waar ze verschillen wat de maker het mooist vindt. Noteer per video in `analyse.md` wat je eruit haalde.
 - Per video: frames op 4 per seconde (`ffmpeg -i x.mp4 -vf fps=4,scale=300:-2 analyse/x-%03d.jpg`) en een contactblad (`uv run --with pillow python <basis>/tools/sheet.py analyse/x-sheet.jpg analyse/x-*.jpg`); grotere losse frames (±600 px) op momenten waar de lay-out wisselt; een transcript via `<STUDIO>/tools/transcribe.py`.
 - Schermopnames van een telefoon: reken de app-interface (knoppen, statusbalk) eruit en vertaal naar 1080×1920.
 - Leg vast in `analyse.md`: lay-outs (soorten beeld, verhoudingen en posities in pixels, waar de spreker staat), ritme (hoe vaak en wanneer er gewisseld wordt, harde cuts of overgangen), ondertitels (letter, gewicht, grootte, kleur, positie, woorden per groep, opbouw, accenten), kleur en achtergrond (hex), vaste elementen (soorten animaties, iconen, tellers, kaarten), hook en afsluiter, geluid.
