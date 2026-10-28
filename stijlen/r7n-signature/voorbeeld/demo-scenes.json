@@ -1,0 +1,9 @@
+[
+  { "start": 0.0, "layout": "hook", "kaart": { "type": "title", "kop": "Dit is een testopname", "sub": "met Claude Code" } },
+  { "start": 1.9, "layout": "split", "kaart": { "type": "tweet", "naam": "R7N Growth", "handle": "r7ngrowth", "tekst": "Ik liet Claude Code mijn reels monteren. Hij kiest per zin de beste take en knipt de pauzes eruit. Werkt verrassend goed.", "tijd": "14:02 · 28 okt 2026", "markeer": [{ "zin": "kiest per zin de beste take", "start": 2.6 }], "kader": { "zin": "Werkt verrassend goed.", "start": 3.3 } } },
+  { "start": 4.05, "layout": "full", "kaart": { "type": "terminal", "titel": "claude — montage", "teller": { "label": "takes", "tot": 6, "start": 4.3 }, "regels": [{ "t": "monteer opname.mp4", "start": 4.1, "soort": "cmd" }, { "t": "take 1 · zin 1  herhaling", "start": 4.7, "soort": "weg" }, { "t": "take 2 · zin 1  gekozen", "start": 5.0, "soort": "ok" }, { "t": "ritme", "start": 5.3, "soort": "balk", "waarde": 82 }, { "t": "ondertitels", "start": 5.5, "soort": "balk", "waarde": 96 }] } },
+  { "start": 6.3, "layout": "split", "kaart": { "type": "device", "soort": "tv", "schermen": [{ "src": "beeld/site.png", "start": 6.3 }, { "src": "beeld/studio.png", "start": 7.0 }], "pil": { "tekst": "zonder reclame", "start": 7.3 } } },
+  { "start": 7.9, "layout": "head", "kaart": { "type": "none" } },
+  { "start": 8.9, "layout": "full", "kaart": { "type": "counter", "label": "minuten bespaard", "tot": 45, "start": 9.0, "duur": 1.0 } },
+  { "start": 10.8, "layout": "close", "kaart": { "type": "none" } }
+]

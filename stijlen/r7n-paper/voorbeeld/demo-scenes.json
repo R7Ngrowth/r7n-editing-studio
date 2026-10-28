@@ -1,0 +1,9 @@
+[
+  { "start": 0.0, "layout": "hook", "kaart": { "type": "logos", "logos": [{ "naam": "Semrush", "kleur": "#ff642d", "start": 0.1 }, { "naam": "ahrefs", "kleur": "#2b6cb0", "start": 0.4 }, { "naam": "Yoast", "kleur": "#a4286a", "start": 0.7 }], "getal": { "waarde": 3346, "prefix": "$", "label": "per jaar", "start": 0.9, "rood": 1.6 } } },
+  { "start": 1.9, "layout": "motion", "kaart": { "type": "headline", "icoon": "zoek", "start": 2.0, "regels": [{ "t": "een" }, { "t": "seo-expert", "accent": true }] } },
+  { "start": 4.05, "layout": "split", "kaart": { "type": "ranking", "titel": "pagina 1", "items": [{ "nr": 10, "t": "on-page seo", "start": 4.1 }, { "nr": 11, "t": "gratis seo tools", "start": 4.2, "delta": "1 plek", "licht": 4.6 }, { "nr": 12, "t": "zoekwoordenonderzoek", "start": 4.3, "delta": "2 plekken", "licht": 5.0 }, { "nr": 13, "t": "backlinks checken", "start": 4.4, "delta": "3 plekken", "weg": 5.6 }] } },
+  { "start": 6.3, "layout": "motion", "kaart": { "type": "pixel", "label": "Tool 1", "icoon": "🔎", "tekst": "SEARCH", "sub": "mcp", "start": 6.5 } },
+  { "start": 7.9, "layout": "motion", "kaart": { "type": "installer", "titel": "npx seo-tools install", "start": 8.0, "duur": 1.6, "stappen": [{ "t": "installeren", "start": 8.4 }, { "t": "koppelen", "start": 8.9 }, { "t": "klaar", "start": 9.4 }] } },
+  { "start": 9.8, "layout": "split", "kaart": { "type": "toggle", "naam": "Search Console", "start": 10.1 } },
+  { "start": 10.8, "layout": "close", "kaart": { "type": "none" } }
+]

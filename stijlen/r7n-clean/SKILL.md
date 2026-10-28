@@ -36,5 +36,18 @@ Beproefde volgorde: hook → split → split → full → split → split → cl
 ## Spreker (`src/Speaker.tsx`)
 Grote afgeronde kaart (r56) met brede zachte schaduw, zonder rand; onderin een donker verloop zodat de witte ondertitel leesbaar blijft. Ingezoomd via `meta.spreker.focus` en `zoomBox`. Met een uitsnede (`alpha: true`) steekt het hoofd boven de kaart uit. Bij `close` beeldvullend.
 
+## Extra elementen (in alle R7N-stijlen, `src/cards/Extra.tsx`)
+Deze stijl is de R7N-tegenhanger van een luchtige app-stijl. Ondertitels staan per groep in een donker half-doorzichtig blokje; de achtergrond heeft langzaam bewegende perzik- en blauwe vlekken. Gebruik vooral:
+- **`voice`**: donker assistent-paneel met gloeiende bol, geluidsgolf, statuspil ("Luistert…" → "Klaar" op `klaar`) en tekst die meetypt. Sterk als hook.
+- **`keys`**: witte 3D-toetsen die op hun woord indrukken met een rimpeling (sneltoetsen).
+- **`mail`**: e-mail met een `antwoord` dat meetypt.
+- **`checklist`**: takenlijst ("Vandaag") met afvinken (`af`) en zwevende app-icoontjes eromheen die op slot gaan (`slot`).
+- **`ring`**: draaiende ring met de productnaam letter voor letter en toetsen eronder.
+- **`terminal`** is hier een chatpaneel; `motion` voor grote animaties, `head` voor tussenzinnen.
+Zie `voorbeeld/demo-scenes.json` voor een volledig voorbeeld.
+
+## Referentie
+Staat er een map `referentiebeelden/` in deze stijlmap, bekijk die eerst: zo dicht en snel moet de montage zijn.
+
 ## Geluid
-Geen muziek of effecten; stem op −14 LUFS via `tools/export.sh`.
+Geluidseffecten gaan vanzelf mee (`src/Geluid.tsx`, eigen geluiden in `public/sfx`, op 20%): whoosh bij elke scène, pop bij lijstpunten, tick en ding bij tellers. Uitzetten met `"geluid": false` in `meta.json`. Geen muziek: die voegt de maker toe in Instagram of TikTok. Stem op −14 LUFS en 48 kHz via `tools/export.sh`.

@@ -421,6 +421,7 @@ function styleCard(s) {
 	const acts = [];
 	if (s.status === 'klaar') acts.push(`<a class="btn dark small" href="#/editen" data-use="${s.id}">Gebruik deze stijl</a>`);
 	if (s.type !== 'ingebouwd' && s.status === 'klaar') acts.push(`<button class="btn ghost small" data-analyse="${s.id}">Analyse</button>`);
+	if ((s.referentiebeelden || []).length) acts.push(`<button class="btn ghost small" data-referentie="${s.id}">Referentie (${s.referentiebeelden.length})</button>`);
 	if (busy) acts.push(`<button class="btn ghost small" data-sstop="${s.id}">Stop</button>`);
 	if (s.type !== 'ingebouwd' && ['mislukt', 'gestopt', 'concept', 'klaar'].includes(s.status)) acts.push(`<button class="btn ghost small" data-sbouw="${s.id}">${s.status === 'klaar' ? 'Opnieuw bouwen' : 'Bouwen'}</button>`);
 	if (s.type !== 'ingebouwd' && !busy) acts.push(`<button class="btn ghost small" data-sdel="${s.id}">Verwijderen</button>`);
@@ -519,10 +520,15 @@ async function loadJobs() {
 
 // ---------- knoppen ----------
 document.addEventListener('click', async (e) => {
-	const t = e.target.closest('[data-use],[data-analyse],[data-sstop],[data-sbouw],[data-sdel],[data-rapport],[data-vstop],[data-vre],[data-vdel]');
+	const t = e.target.closest('[data-use],[data-referentie],[data-analyse],[data-sstop],[data-sbouw],[data-sdel],[data-rapport],[data-vstop],[data-vre],[data-vdel]');
 	if (!t) return;
 	const d = t.dataset;
 	if (d.use) { picked.clear(); picked.add(d.use); renderPick(); return; }
+	if (d.referentie) {
+		const st = STIJLEN.find((x) => x.id === d.referentie);
+		$('#modalBody').innerHTML = `<h2 style="margin-top:0">Referentie · ${esc(st.naam)}</h2><p>Lokale voorbeeldbeelden van het niveau dat de montage moet halen. Claude bekijkt ze bij elke montage in deze stijl. Ze staan alleen op deze Mac en gaan niet mee naar GitHub.</p><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">${st.referentiebeelden.map((f) => `<img src="/media/stijlen/${st.id}/referentiebeelden/${encodeURIComponent(f)}" style="width:100%;border-radius:10px;border:1px solid var(--line)" alt="">`).join('')}</div><p><button class="btn ghost" onclick="document.querySelector('#modal').close()">Sluiten</button></p>`;
+		return $('#modal').showModal();
+	}
 	if (d.analyse) return showMd(await fetch(`/media/stijlen/${d.analyse}/analyse.md`).then((r) => (r.ok ? r.text() : 'Geen analyse gevonden.')));
 	if (d.rapport) return showMd(await fetch(`/media/videos/${d.rapport}/rapport.md`).then((r) => r.text()));
 	if (d.sstop && confirm('Het bouwen van deze stijl stoppen?')) await fetch(`/api/stijlen/${d.sstop}/stop`, {method: 'POST'});

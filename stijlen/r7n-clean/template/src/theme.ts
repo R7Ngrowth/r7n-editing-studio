@@ -23,12 +23,18 @@ export const font = {
 };
 
 // Lay-outs (pixels op 1080×1920). split = 50/50: kaart y140–940, spreker y1000–1800. Ondertitel over het onderste deel.
-export type Layout = "hook" | "split" | "full" | "close";
+export type Layout = "hook" | "split" | "full" | "close" | "head" | "motion";
+// head = korte tussenzin, spreker beeldvullend met push-in; motion = animatie over het hele scherm zonder spreker en zonder kader.
 export const layout: Record<Layout, { kaart: { x: number; y: number; w: number; h: number }; spreker: { x: number; y: number; w: number; h: number; r: number } | "vol" | "weg"; ondertitelY: number }> = {
   hook: { kaart: { x: 80, y: 140, w: 920, h: 800 }, spreker: { x: 80, y: 1000, w: 920, h: 800, r: 56 }, ondertitelY: 1640 },
   split: { kaart: { x: 80, y: 140, w: 920, h: 800 }, spreker: { x: 80, y: 1000, w: 920, h: 800, r: 56 }, ondertitelY: 1640 },
   full: { kaart: { x: 80, y: 140, w: 920, h: 1300 }, spreker: "weg", ondertitelY: 1560 },
   close: { kaart: { x: 80, y: 140, w: 920, h: 800 }, spreker: "vol", ondertitelY: 1340 },
+  head: { kaart: { x: 80, y: 140, w: 920, h: 800 }, spreker: "vol", ondertitelY: 1180 },
+  motion: { kaart: { x: 60, y: 150, w: 960, h: 1000 }, spreker: "weg", ondertitelY: 1250 },
 };
 
 export const ease = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
+
+// Eigenschappen die de gedeelde kaarten (cards/Extra.tsx) gebruiken om in deze stijl te passen.
+export const stijl = { donker: false, serifCursief: false };

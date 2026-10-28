@@ -1,0 +1,9 @@
+[
+  { "start": 0.0, "layout": "hook", "kaart": { "type": "voice", "status": "Luistert…", "tekst": "Open mijn mail en plan vrijdag in.", "start": 0.1, "klaar": 1.6 } },
+  { "start": 1.9, "layout": "split", "kaart": { "type": "keys", "titel": "Eén sneltoets", "toetsen": [{ "t": "⌃ control", "start": 2.4 }, { "t": "⌥ option", "start": 2.8 }, { "t": "space", "start": 3.2 }] } },
+  { "start": 4.05, "layout": "full", "kaart": { "type": "mail", "van": "Sanne de Vries", "onderwerp": "Even bellen deze week?", "tekst": "Hoi! Heb je donderdag tijd om de lancering door te nemen? 15 minuten is genoeg.", "antwoord": { "tekst": "Donderdag 10:00 past, ik stuur een uitnodiging.", "start": 4.6 } } },
+  { "start": 6.3, "layout": "split", "kaart": { "type": "checklist", "titel": "Vandaag", "items": [{ "t": "Pitchdeck afmaken", "start": 6.3, "af": 6.7 }, { "t": "Sanne antwoorden", "start": 6.4, "af": 7.1 }, { "t": "Sporten om 18:00", "start": 6.5 }], "iconen": [{ "naam": "YouTube", "kleur": "#ff0000", "start": 6.4, "slot": 7.2 }, { "naam": "X", "kleur": "#111111", "start": 6.5, "slot": 7.3 }, { "naam": "Instagram", "kleur": "#e1306c", "start": 6.6, "slot": 7.4 }, { "naam": "Netflix", "kleur": "#e50914", "start": 6.7, "slot": 7.5 }] } },
+  { "start": 7.9, "layout": "motion", "kaart": { "type": "ring", "naam": "Focus", "start": 8.0, "toetsen": ["⌘", "F"] } },
+  { "start": 9.6, "layout": "full", "kaart": { "type": "terminal", "titel": "Assistent", "regels": [{ "t": "Zet mijn meldingen uit tot 12:00", "start": 9.7, "soort": "cmd" }, { "t": "Meldingen uit tot 12:00", "start": 10.3, "soort": "ok" }] } },
+  { "start": 10.8, "layout": "close", "kaart": { "type": "none" } }
+]

@@ -16,3 +16,6 @@ stijlen/*/template/out/
 stijlen/*/template/public/speaker*
 *.log
 .DS_Store
+
+# Lokale referentiebeelden (bijv. uit een andere editingtool): alleen voor Claude op deze Mac, niet publiceren
+stijlen/*/referentiebeelden/

@@ -36,5 +36,19 @@ Beproefde volgorde voor een lijstje: hook → split (teller "3 tools") → full 
 ## Spreker (`src/Speaker.tsx`)
 Papieren kaart (beige, dunne rand, zachte schaduw) met een klein oranje tabje linksboven. Ingezoomd op het gezicht via `meta.spreker.focus` en `zoomBox`. Met een uitsnede (`alpha: true`) steekt het hoofd boven de kaart uit. Bij `close` beeldvullend.
 
+## Extra elementen (in alle R7N-stijlen, `src/cards/Extra.tsx`)
+Deze stijl is de R7N-tegenhanger van een motion-graphics-stijl op papier. Gebruik vooral:
+- **`motion`**-lay-out: volledig scherm papier zonder spreker; de ondertitel wordt dan geheel serif-cursief in KAPITALEN, kernwoord oranje.
+- **`logos`**: merknamen die één voor één opkomen en op hun woord rood worden doorgestreept (`weg`), met een **rollend bedrag** eronder (`getal`, bijv. `$` 3.346 "per jaar", rood vanaf `rood`).
+- **`headline`**: grote serif-KAPITALEN met een getekend icoon (`zoek`, `ster`, `pijl`, `vink`) en een impact-geluid.
+- **`ranking`**: rijen "#11 gratis seo tools ↑ 1 plek" die oplichten (`licht`) of doorgestreept worden (`weg`).
+- **`pixel`**: label ("TOOL 1"), app-icoon, de naam in pixelletters letter voor letter, en gespatieerde letters eronder (`sub`).
+- **`toggle`**: logo met schakelaar "TOEGANG UIT → VERLEEND"; **`installer`**: voortgangsbalk met handgeschreven 1 2 3.
+- **`head`** voor korte tussenzinnen. Wissel elke 1 à 3 s: split → motion → head → motion → …
+Zie `voorbeeld/demo-scenes.json` voor een volledig voorbeeld.
+
+## Referentie
+Staat er een map `referentiebeelden/` in deze stijlmap, bekijk die eerst: zo dicht en snel moet de montage zijn.
+
 ## Geluid
-Geen muziek of effecten; stem op −14 LUFS via `tools/export.sh`.
+Geluidseffecten gaan vanzelf mee (`src/Geluid.tsx`, eigen geluiden in `public/sfx`, op 20%): whoosh bij elke scène, pop bij lijstpunten, tick en ding bij tellers. Uitzetten met `"geluid": false` in `meta.json`. Geen muziek: die voegt de maker toe in Instagram of TikTok. Stem op −14 LUFS en 48 kHz via `tools/export.sh`.

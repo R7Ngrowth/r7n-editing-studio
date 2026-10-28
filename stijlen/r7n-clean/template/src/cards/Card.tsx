@@ -1,7 +1,8 @@
 // Kaarten van R7N Clean: afbeelding en browser, chatpaneel dat meetypt (terminal én typing), teller, lijst met 3D-achtige iconen, citaat, titel.
 import { Img, staticFile } from "remotion";
 import { ease, font, kleur } from "../theme";
-import type { Camera, Kaart, Markeer } from "../types";
+import type { Camera, Kaart, Markeer, Regel } from "../types";
+import { Extra, TerminalExtra, TerminalTeller } from "./Extra";
 import { Frame, Pil, nlGetal } from "../ui";
 
 const BASIS: Camera = { x: 0.5, y: 0.5, s: 1 };
@@ -58,18 +59,25 @@ function Beeld({ src, t, van, naar, wissel, markeer, balk }: { src: string; t: n
 }
 
 // Chatpaneel: regels als berichten; `cmd` typt mee als vraag, `uit`/`ok`/`fout` als antwoordkaartjes.
-function Paneel({ titel, regels, t }: { titel?: string; regels: { t: string; start: number; soort?: "cmd" | "uit" | "ok" | "fout" }[]; t: number }) {
+function Paneel({ titel, regels, teller, t }: { titel?: string; regels: Regel[]; teller?: { label: string; tot: number; start: number; duur?: number }; t: number }) {
   return (
     <Frame style={{ background: kleur.surface2 }}>
       <div style={{ height: 76, display: "flex", alignItems: "center", gap: 14, padding: "0 30px", background: kleur.surface, borderBottom: `1px solid ${kleur.line}` }}>
         <span style={{ width: 34, height: 34, borderRadius: 10, background: `linear-gradient(135deg, ${kleur.accent}, #8aa0ff)` }} />
         <span style={{ fontFamily: font.sans, fontWeight: 600, fontSize: 26, color: kleur.text }}>{titel ?? "Assistent"}</span>
+        <TerminalTeller teller={teller} t={t} />
       </div>
       <div style={{ padding: "24px 28px", display: "flex", flexDirection: "column", gap: 14 }}>
         {regels
           .filter((r) => t >= r.start)
           .map((r, i) => {
             const soort = r.soort ?? "uit";
+            if (soort === "weg" || soort === "balk")
+              return (
+                <div key={i} style={{ padding: "12px 22px", borderRadius: 20, background: kleur.surface, fontFamily: font.sans, fontSize: 28 }}>
+                  <TerminalExtra r={r} t={t} kleurTekst={kleur.text} />
+                </div>
+              );
             const vraag = soort === "cmd";
             const p = vraag ? Math.min(1, (t - r.start) / 0.7) : ease((t - r.start) / 0.3);
             const tekst = vraag ? r.t.slice(0, Math.ceil(r.t.length * p)) : r.t;
@@ -177,6 +185,6 @@ export function Card({ kaart, t, sceneStart }: { kaart: Kaart; t: number; sceneS
     case "title":
       return <Titel {...kaart} t={t - sceneStart} />;
     default:
-      return null;
+      return <>{Extra({ kaart, t })}</>;
   }
 }

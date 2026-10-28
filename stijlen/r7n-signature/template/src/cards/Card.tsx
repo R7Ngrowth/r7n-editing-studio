@@ -1,7 +1,8 @@
 // Alle soorten kaarten: afbeelding (met camera en markeringen), browser, terminal, teller, lijst, citaat en titel.
 import { Img, staticFile } from "remotion";
 import { ease, font, kleur } from "../theme";
-import type { Camera, Kaart, Markeer } from "../types";
+import type { Camera, Kaart, Markeer, Regel } from "../types";
+import { Extra, TerminalExtra, TerminalTeller } from "./Extra";
 import { Frame, Pil, nlGetal } from "../ui";
 
 const BASIS: Camera = { x: 0.5, y: 0.5, s: 1 };
@@ -57,8 +58,8 @@ function Beeld({ src, t, van, naar, wissel, markeer, balk }: { src: string; t: n
   );
 }
 
-function Terminal({ titel, regels, t }: { titel?: string; regels: { t: string; start: number; soort?: "cmd" | "uit" | "ok" | "fout" }[]; t: number }) {
-  const kleurVoor = { cmd: kleur.text, uit: kleur.muted, ok: kleur.ok, fout: kleur.bad };
+function Terminal({ titel, regels, teller, t }: { titel?: string; regels: Regel[]; teller?: { label: string; tot: number; start: number; duur?: number }; t: number }) {
+  const kleurVoor = { cmd: kleur.text, uit: kleur.muted, ok: kleur.ok, fout: kleur.bad, weg: kleur.bad, balk: kleur.muted };
   return (
     <Frame style={{ background: "#07080c" }}>
       <div style={{ height: 64, display: "flex", alignItems: "center", gap: 10, padding: "0 22px", background: kleur.surface2, borderBottom: `1px solid ${kleur.line}` }}>
@@ -66,12 +67,19 @@ function Terminal({ titel, regels, t }: { titel?: string; regels: { t: string; s
           <span key={k} style={{ width: 16, height: 16, borderRadius: 8, background: k }} />
         ))}
         <span style={{ marginLeft: 14, color: kleur.muted, fontFamily: font.mono, fontSize: 20 }}>{titel ?? "terminal"}</span>
+        <TerminalTeller teller={teller} t={t} />
       </div>
       <div style={{ padding: "26px 34px", fontFamily: font.mono, fontSize: 30, lineHeight: 1.55 }}>
         {regels
           .filter((r) => t >= r.start)
           .map((r, i) => {
             const soort = r.soort ?? "uit";
+            if (soort === "weg" || soort === "balk")
+              return (
+                <div key={i} style={{ whiteSpace: "pre-wrap", opacity: Math.min(1, (t - r.start) / 0.12) }}>
+                  <TerminalExtra r={r} t={t} kleurTekst={kleur.text} />
+                </div>
+              );
             const p = soort === "cmd" ? Math.min(1, (t - r.start) / 0.6) : 1;
             const tekst = r.t.slice(0, Math.ceil(r.t.length * p));
             return (
@@ -182,6 +190,6 @@ export function Card({ kaart, t, sceneStart }: { kaart: Kaart; t: number; sceneS
     case "title":
       return <Titel {...kaart} t={t - sceneStart} />;
     default:
-      return null;
+      return <>{Extra({ kaart, t })}</>;
   }
 }

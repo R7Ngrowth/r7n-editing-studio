@@ -27,10 +27,14 @@ Schrijf `captions.txt` (uitleg bovenin `tools/captions.py`): één groep per reg
 Draai `python3 tools/captions.py captions.txt public/speaker.json` en los alle "NIET GEVONDEN"-meldingen op.
 
 ## 5. Scènes en kaarten
+**Kijk eerst naar het niveau.** Staat er in de stijlmap een map `referentiebeelden/`, bekijk die beelden dan vóór je scènes maakt (Read op de jpg's). Ze laten zien hoe dicht, snel en gevarieerd een goede montage is: elke 1 à 3 seconden een nieuw beeld, ook midden in een zin, met kaarten die precies op hun woord binnenkomen. Neem dat niveau over, niet de kleuren of het beeld zelf. Het volledige voorbeeld van alle kaartsoorten staat in `voorbeeld/demo-scenes.json` van de stijl.
+
+**Wissel genoeg.** Gebruik in een reel van 60 s minstens 20 scènes, met minstens 5 verschillende kaartsoorten, `head` voor korte tussenzinnen en `motion` voor grote animaties. Alle kaartsoorten staan in `src/types.ts`: basis (image, browser, terminal, counter, list, quote, title), social en apparaten (tweet, device), app-animaties (keys, mail, checklist, voice, ring) en motion graphics (logos, ranking, headline, pixel, toggle, installer). Terminalregels kunnen ook `weg` (doorgestreept) of `balk` (voortgangsbalk met `waarde`) zijn, met een `teller` in de kopbalk.
+
 Vul `src/data/scenes.json`: een lijst van `{start, layout, kaart}` op de woordtijden uit `public/speaker.json`, steeds net vóór het woord waarop het beeld moet wisselen. De lay-outs en kaartsoorten staan in `SKILL.md` en `src/types.ts`. Laat elke markering, teller of regel starten op het woord dat erbij hoort.
 Zet in `src/data/meta.json`: `durationInFrames` = duur van `speaker.mp4` × 30 (afgerond naar boven), `titel`, en bij `spreker.focus` waar het gezicht zit (controleer met een still).
 
-**Beeldmateriaal** in `public/beeld/`: echte bronnen gaan voor. Screenshots maak je met headless Chrome (`"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --screenshot=public/beeld/x.png --window-size=1200,1600 --force-device-scale-factor=2 <url>`); gebruik officiële afbeeldingen van de productsite; logo's uit simple-icons (CC0). Wat je zelf namaakt, meld je in het rapport. Gebruik nooit beeld of audio uit referentievideo's van de stijl, en geen muziek.
+**Beeldmateriaal** in `public/beeld/`: echte bronnen gaan voor. Screenshots maak je met headless Chrome (`"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --screenshot=public/beeld/x.png --window-size=1200,1600 --force-device-scale-factor=2 <url>`); gebruik officiële afbeeldingen van de productsite; logo's uit simple-icons (CC0). Wat je zelf namaakt, meld je in het rapport. Gebruik nooit beeld of audio uit referentievideo's of referentiebeelden van de stijl, en geen muziek.
 
 ## 6. Uitsnede (alleen als de stijl het hoofd boven de box laat uitsteken)
 Zie de uitleg bovenin `tools/uitsnede.swift`. Zet daarna `"alpha": true` in `meta.json`. Sla dit over als de opname geen duidelijke persoon toont.
@@ -41,6 +45,7 @@ Zie de uitleg bovenin `tools/uitsnede.swift`. Zet daarna `"alpha": true` in `met
 - Verbeter en controleer opnieuw tot het klopt.
 
 ## 8. Exporteren en eindcontrole
+Geluidseffecten gaan vanzelf mee (`src/Geluid.tsx`: whoosh bij elke scène, pop bij lijstpunten en markeringen, tick en ding bij tellers, impact bij een grote kop, op 20%). Zet `"geluid": false` in `meta.json` als de maker geen effecten wil. Het geluid van `final.mp4` moet 48 kHz zijn (`tools/export.sh` regelt dat); controleer met `ffprobe -show_entries stream=sample_rate final.mp4`, want 96 kHz speelt op veel telefoons en in browsers stil af.
 `zsh tools/export.sh` rendert en normaliseert naar −14 LUFS → `final.mp4` in de werkmap. Transcribeer `final.mp4` nog één keer en controleer dat geen woord ontbreekt, afgekapt is of dubbel staat. Maak een contactblad van ±12 momenten verspreid over de video en bekijk het.
 
 ## 9. Rapport

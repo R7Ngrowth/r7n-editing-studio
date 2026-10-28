@@ -88,7 +88,7 @@ async function route(req, res) {
   }
   if (M === "GET" && a === "media" && b === "stijlen" && c) {
     const rel = delen.slice(3).join("/");
-    if (!/^(voorbeeld\/[^/]+|analyse\.md|SKILL\.md)$/.test(rel)) return fout(res, 403, "niet beschikbaar");
+    if (!/^((voorbeeld|referentiebeelden)\/[^/]+|analyse\.md|SKILL\.md)$/.test(rel)) return fout(res, 403, "niet beschikbaar");
     const p = veiligPad(stijlen.map(c), rel);
     return p ? bestand(req, res, p) : fout(res, 400, "ongeldig pad");
   }

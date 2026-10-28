@@ -37,5 +37,16 @@ Beproefde volgorde: hook → full → split → full → full → split → full
 ## Spreker (`src/Speaker.tsx`)
 In de box ingezoomd op het gezicht (`meta.spreker.focus`, `zoomBox`). Met een uitsnede (`alpha: true`, zie `tools/uitsnede.swift`) steekt het hoofd boven de box uit. Bij `close` beeldvullend met een donker verloop onderaan voor de afsluiter.
 
+## Extra elementen (in alle R7N-stijlen, `src/cards/Extra.tsx`)
+Deze stijl is de R7N-tegenhanger van een AI-nieuwsstijl. Gebruik vooral:
+- **`tweet`**: post met naam, handle en vinkje; `markeer` veegt een oranje markering over een zin op zijn woord, `kader` zet er een rood kader om. Ideaal als bron bij nieuws.
+- **`device`** (`tv`, `laptop`, `telefoon`): mockup met schermen die op hun seconde wisselen (vervaging) en een witte `pil` eronder.
+- **`terminal`** met `weg`-regels (rood doorgestreept), `balk`-regels (voortgangsbalk met getal) en een `teller` rechtsboven ("takes 6/6").
+- **`head`**: korte tussenzin met de spreker beeldvullend; **`motion`**: grote animatie zonder kader (bijv. `headline`, `logos`).
+Zie `voorbeeld/demo-scenes.json` voor een volledig voorbeeld.
+
+## Referentie
+Staat er een map `referentiebeelden/` in deze stijlmap, bekijk die eerst: zo dicht en snel moet de montage zijn.
+
 ## Geluid
-Geen muziek en geen effecten: de stem, genormaliseerd naar −14 LUFS door `tools/export.sh`. Muziek voegt de maker zelf toe in Instagram of TikTok.
+Geluidseffecten gaan vanzelf mee (`src/Geluid.tsx`, eigen geluiden in `public/sfx`, op 20%): whoosh bij elke scène, pop bij lijstpunten, tick en ding bij tellers. Uitzetten met `"geluid": false` in `meta.json`. Geen muziek: die voegt de maker toe in Instagram of TikTok. Stem op −14 LUFS en 48 kHz via `tools/export.sh`.

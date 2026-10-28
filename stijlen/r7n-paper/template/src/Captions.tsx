@@ -3,7 +3,7 @@
 import { ease, font, kleur } from "./theme";
 import type { Captions as CaptionsData } from "./types";
 
-export function Captions({ data, t, y, donker }: { data: CaptionsData; t: number; y: number; donker: boolean }) {
+export function Captions({ data, t, y, donker, modus }: { data: CaptionsData; t: number; y: number; donker: boolean; modus?: string }) {
   const inkt = donker ? "#ffffff" : kleur.text;
   const schaduw = donker ? "0 4px 24px rgba(0,0,0,.7)" : "none";
   const cta = data.cta && t >= data.cta.start ? data.cta : null;
@@ -26,6 +26,12 @@ export function Captions({ data, t, y, donker }: { data: CaptionsData; t: number
       {zichtbaar.map((w, i) => {
         const p = ease((t - w.start + 0.03) / 0.14);
         const basis = { display: "inline-block", opacity: p, transform: `translateY(${(1 - p) * 14}px)`, filter: `blur(${(1 - p) * 8}px)`, textShadow: schaduw } as const;
+        if (modus === "motion")
+          return (
+            <span key={i} style={{ ...basis, fontFamily: font.serif, fontStyle: "italic", fontSize: groep.woorden.length > 2 ? 92 : 106, lineHeight: 1, textTransform: "uppercase", color: w.accent ? kleur.accent : kleur.text }}>
+              {w.t}
+            </span>
+          );
         return w.accent ? (
           <span key={i} style={{ ...basis, fontFamily: font.serif, fontSize: 104, lineHeight: 1, letterSpacing: 2, textTransform: "uppercase", color: donker ? kleur.accent : kleur.accent2 }}>
             {w.t}

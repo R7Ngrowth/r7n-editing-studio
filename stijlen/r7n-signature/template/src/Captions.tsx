@@ -3,7 +3,7 @@
 import { ease, font, kleur } from "./theme";
 import type { Captions as CaptionsData } from "./types";
 
-export function Captions({ data, t, y, donker }: { data: CaptionsData; t: number; y: number; donker: boolean }) {
+export function Captions({ data, t, y, donker, modus }: { data: CaptionsData; t: number; y: number; donker: boolean; modus?: string }) {
   const cta = data.cta && t >= data.cta.start ? data.cta : null;
   if (cta) {
     const p = ease((t - cta.start) / 0.35);

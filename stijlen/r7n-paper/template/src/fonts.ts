@@ -5,6 +5,7 @@ const LIJST: [string, string, string][] = [
   ["Geist", "fonts/Geist.ttf", "normal"],
   ["Geist Mono", "fonts/GeistMono.ttf", "normal"],
   ["Instrument Serif", "fonts/InstrumentSerif-Italic.ttf", "italic"],
+  ["Jersey 10", "fonts/Jersey10-Regular.ttf", "normal"],
   ["Instrument Serif", "fonts/InstrumentSerif-Regular.ttf", "normal"],
 ];
 

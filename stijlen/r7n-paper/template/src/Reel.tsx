@@ -2,6 +2,7 @@
 // Lay-outs schuiven in 0,32 s naar elkaar toe; elke kaart komt binnen op het woord waar hij bij hoort.
 import { AbsoluteFill, Audio, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { Captions } from "./Captions";
+import { Geluid } from "./Geluid";
 import { Card } from "./cards/Card";
 import captions from "./data/captions.json";
 import meta from "./data/meta.json";
@@ -40,8 +41,9 @@ export const Reel = () => {
   };
   const ondertitelY = tussen(V.ondertitelY, L.ondertitelY, p);
   const sprekerStand = tussen(V.spreker === "weg" ? 0 : 1, L.spreker === "weg" ? 0 : 1, p);
-  const donker = scene.layout === "close";
-  const closeStand = tussen(vorige.layout === "close" ? 1 : 0, scene.layout === "close" ? 1 : 0, p);
+  const donker = scene.layout === "close" || scene.layout === "head";
+  const vol = (l: string) => l === "close" || l === "head";
+  const closeStand = tussen(vol(vorige.layout) ? 1 : 0, vol(scene.layout) ? 1 : 0, p);
   const fadeIn = Math.min(1, frame / 5);
 
   return (
@@ -58,7 +60,7 @@ export const Reel = () => {
       {closeStand > 0 && <Speaker meta={META} box="vol" stand={closeStand} t={t} />}
 
       {/* kaart */}
-      {scene.kaart.type !== "none" && scene.layout !== "close" && (
+      {scene.kaart.type !== "none" && !vol(scene.layout) && (
         <div key={i} style={{ position: "absolute", left: kaart.x, top: kaart.y, width: kaart.w, height: kaart.h, opacity: 1 - closeStand }}>
           <div style={{ position: "absolute", inset: 0, ...(t - scene.start < 0.3 ? { transform: `translateY(${(1 - p) * 60}px) scale(${0.94 + 0.06 * p})`, filter: `blur(${(1 - p) * 12}px)`, opacity: p } : {}) }}>
             <Card kaart={scene.kaart} t={t} sceneStart={scene.start} />
@@ -69,7 +71,8 @@ export const Reel = () => {
       {/* spreker in de box */}
       {closeStand < 1 && sprekerStand > 0 && <Speaker meta={META} box={L.spreker === "vol" ? "weg" : L.spreker} stand={sprekerStand * (1 - closeStand)} t={t} />}
 
-      <Captions data={CAPTIONS} t={t} y={ondertitelY} donker={donker} />
+      <Captions data={CAPTIONS} t={t} y={ondertitelY} donker={donker} modus={scene.layout} />
+      <Geluid scenes={SCENES} fps={fps} aan={META.geluid !== false} />
 
       <AbsoluteFill style={{ background: kleur.bg, opacity: 1 - fadeIn, pointerEvents: "none" }} />
     </AbsoluteFill>

@@ -54,6 +54,10 @@ Bij een concurrent legt Claude alleen de *editingstijl* vast (lay-out, ritme, le
 | **R7N Paper** | licht en warm als papier, donkere inkt, rollende cijfers, lijstkaarten met iconen, notitieblok, serif-kapitalen | lijstjes en tools ("3 gratis tools…") |
 | **R7N Clean** | luchtige Apple-look, veel wit en één blauw accent, 50/50-split, chatpaneel dat meetypt, zachte schaduwen | apps, assistenten en productiviteit |
 
+Alle drie de stijlen kennen dezelfde bouwstenen: tweets, tv/laptop/telefoon-mockups, terminals, tellers, rollende bedragen, logo's die worden doorgestreept, ranglijsten, grote koppen, pixelletters, sneltoetsen, mails, takenlijsten met app-icoontjes en een spraakassistent. Geluidseffecten (whoosh, pop, tick) gaan vanzelf mee.
+
+**Referentie:** zet je eigen voorbeeldbeelden van goede edits in `stijlen/<stijl>/referentiebeelden/`. Claude bekijkt ze bij elke montage, en op de stijlkaart zie je ze onder **Referentie**. Die map gaat nooit mee naar GitHub.
+
 Eigen stijlen bouwt Claude voort op de stijl die er het dichtst bij ligt.
 
 ## Instellingen (studio.config.json)
@@ -81,5 +85,5 @@ Eigen stijlen bouwt Claude voort op de stijl die er het dichtst bij ligt.
 
 ## Goed om te weten
 - Claude werkt zelfstandig, zonder bij elke stap te vragen, maar alleen in de mappen van de studio. Start de studio alleen op je eigen Mac.
-- Geen muziek: die voeg je toe in Instagram of TikTok.
+- Geen muziek: die voeg je toe in Instagram of TikTok. Geluidseffecten staan aan; Claude kan ze per video uitzetten als je dat in de notities vraagt.
 - Video's worden gemaakt met Remotion: gratis voor particulieren en bedrijven tot drie medewerkers (remotion.dev/license).
