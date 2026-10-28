@@ -503,7 +503,7 @@ async function loadJobs() {
 		const outs = Object.entries(job.montages).map(([sid, st]) => {
 			const base = `/media/videos/${job.id}/${sid}`;
 			const media = st.status === 'klaar'
-				? `<video src="${base}/final.mp4?v=${encodeURIComponent(st.klaar || '')}" controls playsinline preload="metadata"></video>`
+				? `<video src="${base}/final.mp4?v=${encodeURIComponent(st.versie || st.klaar || '')}" controls playsinline preload="metadata"></video>`
 				: `<img src="${vb(sid)}" alt=""><div class="overlay"><div class="step">${esc(st.stap || LABEL[st.status])}</div>${st.status === 'bezig' ? `<div class="bar"><div style="width:${st.procent ?? 3}%"></div></div>` : ''}<div class="log">${(st.laatste || []).slice(-6).map((l) => esc(l.s)).join('<br>')}</div></div>`;
 			const acts = [];
 			if (st.status === 'klaar') {
