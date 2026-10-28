@@ -66,7 +66,7 @@ Eigen stijlen bouwt Claude voort op de stijl die er het dichtst bij ligt.
 | `port` | poort, standaard 4242 |
 | `maxParallel` | hoeveel Claude-sessies tegelijk (standaard 2; 1 als je Mac het zwaar heeft) |
 | `taal` | taal van je opnames (`nl`, `en`, …) |
-| `model` | optioneel een vast Claude-model |
+| `model` | welk Claude-model monteert (standaard `opus`; elk model heeft binnen je abonnement een eigen weeklimiet) |
 | `claudeToestemming` | `beperkt` (standaard: alleen de commando's die een montage nodig heeft) of `volledig` |
 | `toegestaneOrigins` | welke websites de studio vanuit de browser mogen aanspreken (Mission Control) |
 
